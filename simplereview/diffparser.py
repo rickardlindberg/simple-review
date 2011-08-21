@@ -4,9 +4,9 @@ import re
 class UnifiedDiffParser(object):
 
     def parse(self, unified_diff_string):
-        self.files = []
         self._store_lines(unified_diff_string)
         self._parse_files()
+        return Diff(self._files)
 
     def _store_lines(self, unified_diff_string):
         self._lines = []
@@ -16,6 +16,7 @@ class UnifiedDiffParser(object):
             number += 1
 
     def _parse_files(self):
+        self._files = []
         while self._has_more_lines():
             self._parse_file()
 
@@ -28,7 +29,7 @@ class UnifiedDiffParser(object):
         old = self._parse_file_name()
         new = self._parse_file_name()
         self._current_file = DiffFile(old, new)
-        self.files.append(self._current_file)
+        self._files.append(self._current_file)
 
     def _skip_to_old_file(self):
         while not self._get_current_line().startswith("---"):

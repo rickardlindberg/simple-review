@@ -22,11 +22,7 @@ class list_reviews:
 
 class review:
     def GET(self, id_):
-        r = None
-        for review in repo.list_by_date():
-            if str(review.id_) == str(id_):
-                r = review
-        return render.review(r)
+        return render.review(repo.find_by_id(id_))
 
 class create_review:
     def POST(self):

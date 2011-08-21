@@ -13,6 +13,9 @@ class ReviewRepository(object):
     def list_by_date(self):
         raise NotImplementedError()
 
+    def find_by_id(self, id_):
+        raise NotImplementedError()
+
 
 class SqliteReviewRepository(ReviewRepository):
 
@@ -34,15 +37,24 @@ class SqliteReviewRepository(ReviewRepository):
         result = []
         def fn(cursor):
             cursor.execute("select * from reviews order by date desc")
-            for review_row in cursor:
-                result.append(Review(
-                    id_=review_row["id"],
-                    name=review_row["name"],
-                    date=review_row["date"],
-                    diff=review_row["diff"]
-                ))
+            for row in cursor:
+                result.append(self._row_to_review(row))
         self._with_cursor(fn)
         return result
+
+    def find_by_id(self, id_):
+        def fn(cursor):
+            cursor.execute("select * from reviews where id=?", str(id_))
+            return self._row_to_review(cursor.fetchone())
+        return self._with_cursor(fn)
+
+    def _row_to_review(self, row):
+        return Review(
+            id_=row["id"],
+            name=row["name"],
+            date=row["date"],
+            diff=row["diff"]
+        )
 
     def _create_db(self, cursor=None):
         if cursor:
@@ -61,6 +73,7 @@ class SqliteReviewRepository(ReviewRepository):
         connection = sqlite3.connect(self.path)
         connection.row_factory = sqlite3.Row
         cursor = connection.cursor()
-        fn(cursor)
+        return_value = fn(cursor)
         connection.commit()
         cursor.close()
+        return return_value

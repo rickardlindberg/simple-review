@@ -17,7 +17,7 @@ class ReviewRepository(object):
     def find_by_id(self, id_):
         raise NotImplementedError()
 
-    def add_comment(self, id_, user, text, line=-1):
+    def add_comment(self, review_id, user, text, line=-1):
         raise NotImplementedError()
 
 
@@ -29,40 +29,40 @@ class SqliteReviewRepository(ReviewRepository):
             self._create_db()
 
     def save(self, review):
-        def insert(cursor):
+        def execure_insert_query(cursor):
             cursor.execute("insert into reviews (name, date, diff, user) values (?, ?, ?, ?)", (
                 review.name,
                 datetime.datetime.now(),
                 review.diff,
                 review.user
             ))
-        self._with_cursor(insert)
+        self._with_cursor(execure_insert_query)
 
     def list_by_date(self):
         result = []
-        def fn(cursor):
+        def execute_select_query(cursor):
             cursor.execute("select * from reviews order by date desc")
             for row in cursor:
                 result.append(self._row_to_review(row))
-        self._with_cursor(fn)
+        self._with_cursor(execute_select_query)
         return result
 
     def find_by_id(self, id_):
-        def fn(cursor):
+        def execute_select_query(cursor):
             cursor.execute("select * from reviews where id=?", str(id_))
             return self._row_to_review(cursor.fetchone())
-        return self._with_cursor(fn)
+        return self._with_cursor(execute_select_query)
 
-    def add_comment(self, id_, user, text, line=-1):
-        def insert(cursor):
+    def add_comment(self, review_id, user, text, line=-1):
+        def execute_insert_query(cursor):
             cursor.execute("insert into comments (review_id, date, user, text, line) values (?, ?, ?, ?, ?)", (
-                id_,
+                review_id,
                 datetime.datetime.now(),
                 user,
                 text,
                 line
             ))
-        self._with_cursor(insert)
+        self._with_cursor(execute_insert_query)
 
     def _row_to_review(self, row):
         review = Review(
@@ -76,11 +76,11 @@ class SqliteReviewRepository(ReviewRepository):
         return review
 
     def _add_comments(self, review):
-        def fn(cursor):
-            cursor.execute("select * from comments where review_id=? order by date desc", str(review.id_))
+        def execute_select_query(cursor):
+            cursor.execute("select * from comments where review_id=? order by date asc", str(review.id_))
             for row in cursor:
                 review.add_comment(self._row_to_comment(row))
-        self._with_cursor(fn)
+        self._with_cursor(execute_select_query)
 
     def _row_to_comment(self, row):
         return Comment(
@@ -91,28 +91,27 @@ class SqliteReviewRepository(ReviewRepository):
             line=row["line"]
         )
 
-    def _create_db(self, cursor=None):
-        if cursor:
-            cursor.execute('''
-                create table reviews (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    name text,
-                    date date,
-                    diff text,
-                    user text
-                )
-            ''')
-            cursor.execute('''
-                create table comments (
-                    review_id integer,
-                    date date,
-                    user text,
-                    text text,
-                    line text
-                )
-            ''')
-        else:
-            self._with_cursor(self._create_db)
+    def _create_db(self):
+        def execute_create_queries(cursor):
+            cursor.execute("""
+            create table reviews (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name text,
+                date date,
+                diff text,
+                user text
+            )
+            """)
+            cursor.execute("""
+            create table comments (
+                review_id integer,
+                date date,
+                user text,
+                text text,
+                line text
+            )
+            """)
+        self._with_cursor(execute_create_queries)
 
     def _with_cursor(self, fn):
         connection = sqlite3.connect(self.path)

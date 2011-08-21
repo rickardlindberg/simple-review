@@ -9,6 +9,66 @@ from simplereview.repositories import SqliteReviewRepository
 
 class SqliteReviewRepositoryTest(unittest.TestCase):
 
+    def test_has_no_reviews_at_start(self):
+        self.assertEquals(0, len(self.repo.list_by_date()))
+
+    def test_has_one_review_after_adding_one(self):
+        self.repo.save(Review())
+        self.assertEquals(1, len(self.repo.list_by_date()))
+
+    def test_saved_reviews_can_be_retrieved(self):
+        self.repo.save(Review(name="fix bug", diff="diff...", user="rick"))
+        review = self.repo.list_by_date()[0]
+        self.assertEquals("fix bug", review.name)
+        self.assertEqual("diff...", review.diff)
+        self.assertEqual("rick", review.user)
+
+    def test_adds_date_when_saving_review(self):
+        self.repo.save(Review())
+        review = self.repo.list_by_date()[0]
+        self.assertNotEqual(None, review.date)
+
+    def test_adds_id_when_saving_review(self):
+        self.repo.save(Review())
+        review = self.repo.list_by_date()[0]
+        self.assertNotEquals(None, review.id_)
+
+    def test_gives_unique_ids_to_new_reviews(self):
+        self.repo.save(Review())
+        self.repo.save(Review())
+        all_reviews = self.repo.list_by_date()
+        self.assertNotEquals(all_reviews[0].id_, all_reviews[1].id_)
+
+    def test_reviews_can_be_retrieved_by_id(self):
+        self.repo.save(Review())
+        review_by_list = self.repo.list_by_date()[0]
+        review_by_id = self.repo.find_by_id(review_by_list.id_)
+        self.assertEquals(review_by_list.name, review_by_id.name)
+
+    def test_sorts_reviews_latest_first(self):
+        self.repo.save(Review(name="first"))
+        self.repo.save(Review(name="second"))
+        self.assertEquals(
+            ["second", "first"],
+            [review.name for review in self.repo.list_by_date()])
+
+    def test_can_add_comment_to_review(self):
+        self.repo.save(Review())
+        review = self.repo.list_by_date()[0]
+        self.repo.add_comment(review.id_, "rick", "comment")
+        review = self.repo.list_by_date()[0]
+        self.assertEquals("rick", review.comments[0].user)
+        self.assertEquals("comment", review.comments[0].text)
+
+    def test_sorts_comment_latest_last(self):
+        self.repo.save(Review())
+        review = self.repo.list_by_date()[0]
+        self.repo.add_comment(review.id_, "rick", "first")
+        self.repo.add_comment(review.id_, "rick", "second")
+        self.assertEquals(
+            ["first", "second"],
+            [comment.text for comment in self.repo.list_by_date()[0].comments])
+
     def setUp(self):
         self.tmp_dir = tempfile.mkdtemp("simplereview")
         db_path = os.path.join(self.tmp_dir, "db.sqlite")
@@ -16,63 +76,3 @@ class SqliteReviewRepositoryTest(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.tmp_dir)
-
-    def test_saves_date(self):
-        self.repo.save(self.a_review_with_name("fix bug"))
-        review = self.repo.list_by_date()[0]
-        self.assertNotEqual(None, review.date)
-
-    def test_saves_diff(self):
-        self.repo.save(Review(diff="diff..."))
-        review = self.repo.list_by_date()[0]
-        self.assertEqual("diff...", review.diff)
-
-    def test_saves_user(self):
-        self.repo.save(Review(user="user..."))
-        review = self.repo.list_by_date()[0]
-        self.assertEqual("user...", review.user)
-
-    def test_saved_reviews_can_be_retrieved(self):
-        self.repo.save(self.a_review_with_name("fix bug"))
-        reviews = self.repo.list_by_date()
-        self.assert_contains_one_review_with_name(reviews, "fix bug")
-
-    def test_adds_id_to_saved_review(self):
-        self.repo.save(self.a_review_with_name("foo"))
-        reviews = self.repo.list_by_date()
-        self.assertNotEquals(None, reviews[0].id_)
-
-    def test_two_added_have_different_ids(self):
-        self.repo.save(self.a_review_with_name("foo"))
-        self.repo.save(self.a_review_with_name("bar"))
-        reviews = self.repo.list_by_date()
-        self.assertNotEquals(reviews[0].id_, reviews[1].id_)
-
-    def test_reviews_can_be_retrieved_by_id(self):
-        self.repo.save(self.a_review_with_name("foo"))
-        review_by_list = self.repo.list_by_date()[0]
-        review_by_id = self.repo.find_by_id(review_by_list.id_)
-        self.assertEquals(review_by_list.name, review_by_id.name)
-
-    def test_reviews_are_retrieved_in_correct_order(self):
-        self.repo.save(self.a_review_with_name("first"))
-        self.repo.save(self.a_review_with_name("second"))
-        reviews = self.repo.list_by_date()
-        self.assertEquals(
-            ["second", "first"],
-            [review.name for review in reviews])
-
-    def test_can_add_comment(self):
-        self.repo.save(self.a_review_with_name("first"))
-        review = self.repo.list_by_date()[0]
-        self.repo.add_comment(review.id_, "rick", "comment")
-        review = self.repo.list_by_date()[0]
-        self.assertEquals("rick", review.comments[0].user)
-        self.assertEquals("comment", review.comments[0].text)
-
-    def a_review_with_name(self, name):
-        return Review(name=name)
-
-    def assert_contains_one_review_with_name(self, reviews, name):
-        self.assertEquals(1, len(reviews))
-        self.assertEquals(name, reviews[0].name)

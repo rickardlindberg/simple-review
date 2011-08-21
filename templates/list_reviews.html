@@ -1,4 +1,11 @@
 $def with(list)
 
+<h1>Latest reviews</h1>
+
+<ul>
 $for review in list:
-    <a href="/review/$review.id_">$review.name</a>
+    <li>
+        <a href="/review/$review.id_">$review.name</a>
+        (by att-rilin at $review.date)
+    </li>
+</ul>

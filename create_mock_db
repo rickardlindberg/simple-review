@@ -100,3 +100,7 @@ index 8fa6b23..841e4c7 100644
 
 repo = SqliteReviewRepository(DB_PATH)
 repo.save(Review(name="test review", diff=DIFF, user="rick"))
+
+saved_id = repo.list_by_date()[0].id_
+
+repo.add_comment(saved_id, "joe", "Nice work!")

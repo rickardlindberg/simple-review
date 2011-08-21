@@ -7,6 +7,11 @@ $def with(review)
 <div id="diff">
 </div>
 
+<ul>
+$for comment in review.comments:
+    <li>$comment.text (by <b>$comment.user</b> at $comment.date)</li>
+</ul>
+
 <script type="text/javascript">
     diff($$("diff"), $review.id_)
 </script>

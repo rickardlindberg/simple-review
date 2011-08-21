@@ -62,6 +62,14 @@ class SqliteReviewRepositoryTest(unittest.TestCase):
             ["second", "first"],
             [review.name for review in reviews])
 
+    def test_can_add_comment(self):
+        self.repo.save(self.a_review_with_name("first"))
+        review = self.repo.list_by_date()[0]
+        self.repo.add_comment(review.id_, "rick", "comment")
+        review = self.repo.list_by_date()[0]
+        self.assertEquals("rick", review.comments[0].user)
+        self.assertEquals("comment", review.comments[0].text)
+
     def a_review_with_name(self, name):
         return Review(name=name)
 

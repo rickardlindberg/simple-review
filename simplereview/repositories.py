@@ -23,8 +23,11 @@ class SqliteReviewRepository(ReviewRepository):
 
     def save(self, review):
         def insert(cursor):
-            cursor.execute("insert into reviews (name, date) values (?, ?)", (review.name,
-                datetime.datetime.now()))
+            cursor.execute("insert into reviews (name, date, diff) values (?, ?, ?)", (
+                review.name,
+                datetime.datetime.now(),
+                review.diff
+            ))
         self._with_cursor(insert)
 
     def list_by_date(self):
@@ -32,7 +35,12 @@ class SqliteReviewRepository(ReviewRepository):
         def fn(cursor):
             cursor.execute("select * from reviews order by date desc")
             for review_row in cursor:
-                result.append(Review(id_=review_row["id"], name=review_row["name"]))
+                result.append(Review(
+                    id_=review_row["id"],
+                    name=review_row["name"],
+                    date=review_row["date"],
+                    diff=review_row["diff"]
+                ))
         self._with_cursor(fn)
         return result
 
@@ -42,7 +50,8 @@ class SqliteReviewRepository(ReviewRepository):
                 create table reviews (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     name text,
-                    date date
+                    date date,
+                    diff text
                 )
             ''')
         else:

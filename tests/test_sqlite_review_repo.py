@@ -17,6 +17,16 @@ class SqliteReviewRepositoryTest(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(self.tmp_dir)
 
+    def test_saves_date(self):
+        self.repo.save(self.a_review_with_name("fix bug"))
+        review = self.repo.list_by_date()[0]
+        self.assertNotEqual(None, review.date)
+
+    def test_saves_diff(self):
+        self.repo.save(self.a_review_with_diff("diff..."))
+        review = self.repo.list_by_date()[0]
+        self.assertEqual("diff...", review.diff)
+
     def test_saved_reviews_can_be_retrieved(self):
         self.repo.save(self.a_review_with_name("fix bug"))
         reviews = self.repo.list_by_date()
@@ -43,6 +53,9 @@ class SqliteReviewRepositoryTest(unittest.TestCase):
 
     def a_review_with_name(self, name):
         return Review(name=name)
+
+    def a_review_with_diff(self, diff):
+        return Review(diff=diff)
 
     def assert_contains_one_review_with_name(self, reviews, name):
         self.assertEquals(1, len(reviews))

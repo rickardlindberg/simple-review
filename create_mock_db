@@ -11,5 +11,92 @@ DB_PATH = "dev.db"
 if os.path.exists(DB_PATH):
     os.remove(DB_PATH)
 
+DIFF="""diff --git a/simplereview/domain.py b/simplereview/domain.py
+index b9fe6e8..a6eddbf 100644
+--- a/simplereview/domain.py
++++ b/simplereview/domain.py
+@@ -1,5 +1,7 @@
+ class Review(object):
+ 
+-    def __init__(self, id_=None, name=""):
++    def __init__(self, id_=None, name="", date=None, diff=None):
+         self.id_ = id_
+         self.name = name
++        self.date = date
++        self.diff = diff
+diff --git a/simplereview/repositories.py b/simplereview/repositories.py
+index ed9a9f5..0edddf3 100644
+--- a/simplereview/repositories.py
++++ b/simplereview/repositories.py
+@@ -23,8 +23,11 @@ class SqliteReviewRepository(ReviewRepository):
+ 
+     def save(self, review):
+         def insert(cursor):
+-            cursor.execute("insert into reviews (name, date) values (?, ?)", (review.name,
+-                datetime.datetime.now()))
++            cursor.execute("insert into reviews (name, date, diff) values (?, ?, ?)", (
++                review.name,
++                datetime.datetime.now(),
++                review.diff
++            ))
+         self._with_cursor(insert)
+ 
+     def list_by_date(self):
+@@ -32,7 +35,12 @@ class SqliteReviewRepository(ReviewRepository):
+         def fn(cursor):
+             cursor.execute("select * from reviews order by date desc")
+             for review_row in cursor:
+-                result.append(Review(id_=review_row["id"], name=review_row["name"]))
++                result.append(Review(
++                    id_=review_row["id"],
++                    name=review_row["name"],
++                    date=review_row["date"],
++                    diff=review_row["diff"]
++                ))
+         self._with_cursor(fn)
+         return result
+ 
+@@ -42,7 +50,8 @@ class SqliteReviewRepository(ReviewRepository):
+                 create table reviews (
+                     id INTEGER PRIMARY KEY AUTOINCREMENT,
+                     name text,
+-                    date date
++                    date date,
++                    diff text
+                 )
+             ''')
+         else:
+diff --git a/tests/test_sqlite_review_repo.py b/tests/test_sqlite_review_repo.py
+index 8fa6b23..841e4c7 100644
+--- a/tests/test_sqlite_review_repo.py
++++ b/tests/test_sqlite_review_repo.py
+@@ -17,6 +17,16 @@ class SqliteReviewRepositoryTest(unittest.TestCase):
+     def tearDown(self):
+         shutil.rmtree(self.tmp_dir)
+ 
++    def test_saves_date(self):
++        self.repo.save(self.a_review_with_name("fix bug"))
++        review = self.repo.list_by_date()[0]
++        self.assertNotEqual(None, review.date)
++
++    def test_saves_diff(self):
++        self.repo.save(self.a_review_with_diff("diff..."))
++        review = self.repo.list_by_date()[0]
++        self.assertEqual("diff...", review.diff)
++
+     def test_saved_reviews_can_be_retrieved(self):
+         self.repo.save(self.a_review_with_name("fix bug"))
+         reviews = self.repo.list_by_date()
+@@ -44,6 +54,9 @@ class SqliteReviewRepositoryTest(unittest.TestCase):
+     def a_review_with_name(self, name):
+         return Review(name=name)
+ 
++    def a_review_with_diff(self, diff):
++        return Review(diff=diff)
++
+     def assert_contains_one_review_with_name(self, reviews, name):
+         self.assertEquals(1, len(reviews))
+         self.assertEquals(name, reviews[0].name)"""
+
 repo = SqliteReviewRepository(DB_PATH)
-repo.save(Review(name="test review"))
+repo.save(Review(name="test review", diff=DIFF))

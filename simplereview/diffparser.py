@@ -81,12 +81,25 @@ class UnifiedDiffParser(object):
         return self._lines.pop(0)
 
 
+class Diff(object):
+
+    def __init__(self, files):
+        self.files = files
+
+    def to_json(self):
+        return to_json_list(self.files)
+
+
 class DiffFile(object):
 
     def __init__(self, old, new):
         self.old = old
         self.new = new
         self.chunks = []
+
+    def to_json(self):
+        return '{"old":"%s","new":"%s","chunks":%s}' % (
+            self.old, self.new, to_json_list(self.chunks))
 
 
 class Chunk(object):
@@ -95,6 +108,10 @@ class Chunk(object):
         self.line = line
         self.parts = []
 
+    def to_json(self):
+        return '{"line":%s,"parts":%s}' % (
+            self.line.to_json(), to_json_list(self.parts))
+
 
 class ChunkPart(object):
 
@@ -102,9 +119,24 @@ class ChunkPart(object):
         self.type_ = type_
         self.lines = lines
 
+    def to_json(self):
+        return '{"type":"%s","lines":%s}' % (
+            self.type_, to_json_list(self.lines))
+
 
 class Line(object):
     
     def __init__(self, number, content):
         self.number = number
         self.content = content
+
+    def to_json(self):
+        return '{"number":"%s","content":"%s"}' % (self.number, json_escape(self.content))
+
+
+def to_json_list(list_):
+    return "[" + ",".join(item.to_json() for item in list_) + "]"
+
+
+def json_escape(string):
+    return string.replace('"', '\\"')

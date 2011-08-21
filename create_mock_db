@@ -99,4 +99,4 @@ index 8fa6b23..841e4c7 100644
          self.assertEquals(name, reviews[0].name)"""
 
 repo = SqliteReviewRepository(DB_PATH)
-repo.save(Review(name="test review", diff=DIFF))
+repo.save(Review(name="test review", diff=DIFF, user="rick"))

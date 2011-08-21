@@ -26,10 +26,11 @@ class SqliteReviewRepository(ReviewRepository):
 
     def save(self, review):
         def insert(cursor):
-            cursor.execute("insert into reviews (name, date, diff) values (?, ?, ?)", (
+            cursor.execute("insert into reviews (name, date, diff, user) values (?, ?, ?, ?)", (
                 review.name,
                 datetime.datetime.now(),
-                review.diff
+                review.diff,
+                review.user
             ))
         self._with_cursor(insert)
 
@@ -53,7 +54,8 @@ class SqliteReviewRepository(ReviewRepository):
             id_=row["id"],
             name=row["name"],
             date=row["date"],
-            diff=row["diff"]
+            diff=row["diff"],
+            user=row["user"]
         )
 
     def _create_db(self, cursor=None):
@@ -63,7 +65,8 @@ class SqliteReviewRepository(ReviewRepository):
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     name text,
                     date date,
-                    diff text
+                    diff text,
+                    user text
                 )
             ''')
         else:

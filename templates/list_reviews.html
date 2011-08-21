@@ -6,6 +6,6 @@ $def with(list)
 $for review in list:
     <li>
         <a href="/review/$review.id_">$review.name</a>
-        (by att-rilin at $review.date)
+        (by <b>$review.user</b> at $review.date)
     </li>
 </ul>

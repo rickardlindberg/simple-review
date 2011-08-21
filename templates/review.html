@@ -1,3 +1,10 @@
 $def with(review)
 
 This is review $review.name
+
+<div id="diff">
+</div>
+
+<script type="text/javascript">
+    diff($$("diff"), $review.id_)
+</script>

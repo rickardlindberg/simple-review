@@ -1,5 +1,6 @@
 import os
 
+from simplereview.diffparser import UnifiedDiffParser
 from simplereview.domain import Review
 from simplereview.repositories import SqliteReviewRepository
 
@@ -11,10 +12,12 @@ URLS = (
     "/", "list_reviews",
     "/create_review", "create_review",
     "/review/(.*)", "review",
+    "/review_diff/(.*)", "review_diff",
 )
 
 render = web.template.render(TEMPLATE_DIR, base="base")
 repo = SqliteReviewRepository(DB_PATH)
+diff_parser = UnifiedDiffParser()
 
 class list_reviews:
     def GET(self):
@@ -23,6 +26,11 @@ class list_reviews:
 class review:
     def GET(self, id_):
         return render.review(repo.find_by_id(id_))
+
+class review_diff:
+    def GET(self, id_):
+        web.header("Content-Type", "application/json")
+        return diff_parser.parse(repo.find_by_id(id_).diff).to_json()
 
 class create_review:
     def POST(self):

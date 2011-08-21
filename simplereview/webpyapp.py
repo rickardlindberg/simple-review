@@ -5,7 +5,7 @@ from simplereview.repositories import SqliteReviewRepository
 
 import web
 
-DB_PATH = os.getenv("DB_PATH", "db.db")
+DB_PATH = os.getenv("DB_PATH", "dev.db")
 TEMPLATE_DIR = os.getenv("TEMPLATE_DIR", "templates/")
 URLS = (
     "/", "list_reviews",

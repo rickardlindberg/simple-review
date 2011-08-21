@@ -6,7 +6,7 @@ import os.path
 from simplereview.domain import Review
 from simplereview.repositories import SqliteReviewRepository
 
-DB_PATH = "db.db"
+DB_PATH = "dev.db"
 
 if os.path.exists(DB_PATH):
     os.remove(DB_PATH)

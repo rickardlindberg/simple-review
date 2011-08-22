@@ -1,7 +1,8 @@
+import datetime
+import os.path
 import shutil
 import tempfile
 import unittest
-import os.path
 
 from simplereview.domain import Review
 from simplereview.repositories import SqliteReviewRepository
@@ -26,7 +27,7 @@ class SqliteReviewRepositoryTest(unittest.TestCase):
     def test_adds_date_when_saving_review(self):
         self.repo.save(Review())
         review = self.repo.list_by_date()[0]
-        self.assertNotEqual(None, review.date)
+        self.assertTrue(isinstance(review.date, datetime.datetime))
 
     def test_adds_id_when_saving_review(self):
         self.repo.save(Review())
@@ -59,6 +60,13 @@ class SqliteReviewRepositoryTest(unittest.TestCase):
         review = self.repo.list_by_date()[0]
         self.assertEquals("rick", review.comments[0].user)
         self.assertEquals("comment", review.comments[0].text)
+
+    def test_adds_date_when_adding_comment(self):
+        self.repo.save(Review())
+        review = self.repo.list_by_date()[0]
+        self.repo.add_comment(review.id_, "rick", "comment")
+        comment = self.repo.list_by_date()[0].comments[0]
+        self.assertTrue(isinstance(comment.date, datetime.datetime))
 
     def test_sorts_comment_latest_last(self):
         self.repo.save(Review())

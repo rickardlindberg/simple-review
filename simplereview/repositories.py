@@ -97,7 +97,7 @@ class SqliteReviewRepository(ReviewRepository):
             create table reviews (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name text,
-                date date,
+                date timestamp,
                 diff text,
                 user text
             )
@@ -105,7 +105,7 @@ class SqliteReviewRepository(ReviewRepository):
             cursor.execute("""
             create table comments (
                 review_id integer,
-                date date,
+                date timestamp,
                 user text,
                 text text,
                 line text
@@ -114,7 +114,7 @@ class SqliteReviewRepository(ReviewRepository):
         self._with_cursor(execute_create_queries)
 
     def _with_cursor(self, fn):
-        connection = sqlite3.connect(self.path)
+        connection = sqlite3.connect(self.path, detect_types=sqlite3.PARSE_DECLTYPES|sqlite3.PARSE_COLNAMES)
         connection.row_factory = sqlite3.Row
         cursor = connection.cursor()
         return_value = fn(cursor)

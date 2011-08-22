@@ -104,3 +104,4 @@ repo.save(Review(name="test review", diff=DIFF, user="rick"))
 saved_id = repo.list_by_date()[0].id_
 
 repo.add_comment(saved_id, "joe", "Nice work!")
+repo.add_comment(saved_id, "joe", "This is bad", 20)

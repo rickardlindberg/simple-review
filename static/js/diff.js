@@ -25,15 +25,15 @@ function file_to_html(file) {
     header.appendChild(span(file.old));
     file_div.appendChild(header);
 
-    file.chunks.each(function (chunk) {
-        chunk_to_html(file_div, chunk);
+    file.hunks.each(function (hunk) {
+        hunk_to_html(file_div, hunk);
     });
     return file_div;
 }
 
-function chunk_to_html(file_div, chunk) {
-    file_div.appendChild(line_to_html(chunk.line, "chunk"));
-    chunk.parts.each(function (part) {
+function hunk_to_html(file_div, hunk) {
+    file_div.appendChild(line_to_html(hunk.line, "hunk"));
+    hunk.parts.each(function (part) {
         part.lines.each(function (line) {
             file_div.appendChild(line_to_html(line, part.type));
         });

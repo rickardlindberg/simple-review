@@ -10,7 +10,7 @@ class UnifiedDiffParser(object):
     def parse(self, unified_diff_string):
         self._store_lines(unified_diff_string)
         self._parse_files()
-        return Diff(self._files)
+        return UnifiedDiff(self._files)
 
     def _store_lines(self, unified_diff_string):
         self._lines = []
@@ -26,13 +26,13 @@ class UnifiedDiffParser(object):
 
     def _parse_file(self):
         self._parse_file_header()
-        self._parse_chunks()
+        self._parse_hunks()
 
     def _parse_file_header(self):
         self._skip_to_old_file()
         old = self._parse_file_name()
         new = self._parse_file_name()
-        self._current_file = DiffFile(old, new)
+        self._current_file = DiffedFile(old, new)
         self._files.append(self._current_file)
 
     def _skip_to_old_file(self):
@@ -43,10 +43,10 @@ class UnifiedDiffParser(object):
         line = self._pop_line().content
         return line[4:]
 
-    def _parse_chunks(self):
+    def _parse_hunks(self):
         while self._has_more_lines() and self._get_current_line().startswith("@@"):
-            self._current_chunk = Chunk(self._pop_line())
-            self._current_file.chunks.append(self._current_chunk)
+            self._current_hunk = Hunk(self._pop_line())
+            self._current_file.hunks.append(self._current_hunk)
             self._parse_diff_part()
 
     def _parse_diff_part(self):
@@ -73,7 +73,7 @@ class UnifiedDiffParser(object):
         lines = []
         while self._has_more_lines() and self._get_current_line().startswith(prefix):
             lines.append(self._pop_line())
-        self._current_chunk.parts.append(ChunkPart(type_, lines))
+        self._current_hunk.parts.append(HunkPart(type_, lines))
     
     def _has_more_lines(self):
         return len(self._lines) > 0
@@ -85,7 +85,7 @@ class UnifiedDiffParser(object):
         return self._lines.pop(0)
 
 
-class Diff(object):
+class UnifiedDiff(object):
 
     def __init__(self, files):
         self.files = files
@@ -96,24 +96,24 @@ class Diff(object):
         )
 
 
-class DiffFile(object):
+class DiffedFile(object):
 
     def __init__(self, old, new):
         self.old = old
         self.new = new
-        self.chunks = []
+        self.hunks = []
 
     def to_json(self):
         return json_object({
-            "old":    json_value(self.old),
-            "new":    json_value(self.new),
-            "chunks": json_list(
-                chunk.to_json() for chunk in self.chunks
+            "old":   json_value(self.old),
+            "new":   json_value(self.new),
+            "hunks": json_list(
+                hunk.to_json() for hunk in self.hunks
             )
         })
 
 
-class Chunk(object):
+class Hunk(object):
 
     def __init__(self, line):
         self.line = line
@@ -128,7 +128,7 @@ class Chunk(object):
         })
 
 
-class ChunkPart(object):
+class HunkPart(object):
 
     def __init__(self, type_, lines):
         self.type_ = type_

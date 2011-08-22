@@ -35,7 +35,7 @@ index bf7dec6..f0e98ac 100644
         self.assertEquals("a/.gitignore", diff.files[1].old)
         self.assertEquals("b/.gitignore", diff.files[1].new)
 
-    def test_parses_chunks(self):
+    def test_parses_hunks(self):
         diff = self.parser.parse("""
 diff --git a/.vimrc b/.vimrc
 index 3aabebf..549bdce 100644
@@ -59,15 +59,15 @@ index 3aabebf..549bdce 100644
  map <F12> :set spelllang=sv<CR>
 
         """.strip())
-        self.assertEquals(2, len(diff.files[0].chunks))
+        self.assertEquals(2, len(diff.files[0].hunks))
         self.assertEquals(
             '@@ -6,7 +6,6 @@ let g:snippets_dir="~/.vim/snippets"',
-            diff.files[0].chunks[0].line.content)
+            diff.files[0].hunks[0].line.content)
         self.assertEquals(
             '@@ -80,7 +79,6 @@ endfunction',
-            diff.files[0].chunks[1].line.content)
+            diff.files[0].hunks[1].line.content)
 
-    def test_parses_diff_lines_in_chunks(self):
+    def test_parses_diff_lines_in_hunks(self):
         diff = self.parser.parse("""
 diff --git a/.vimrc b/.vimrc
 index 3aabebf..da2ded7 100644
@@ -88,7 +88,7 @@ index 3aabebf..da2ded7 100644
  set noignorecase
 
         """.strip())
-        parts = diff.files[0].chunks[0].parts
+        parts = diff.files[0].hunks[0].parts
         self.assertEquals(6, len(parts))
         self.assertEquals("context", parts[0].type_)
         self.assertEquals("removed", parts[1].type_)
@@ -118,6 +118,6 @@ index 3aabebf..da2ded7 100644
  set noignorecase
 
         """.strip())
-        parts = diff.files[0].chunks[0].parts
+        parts = diff.files[0].hunks[0].parts
         self.assertEquals(5, parts[0].lines[0].number)
         self.assertEquals(" filetype plugin indent on", parts[0].lines[0].content)

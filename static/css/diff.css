@@ -25,7 +25,7 @@
     background: #ff0000;
 }
 
-#diff .chunk {
+#diff .hunk {
     background: #cccccc;
 }
 

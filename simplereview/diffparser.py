@@ -1,5 +1,9 @@
 import re
 
+from simplereview.json import json_list
+from simplereview.json import json_object
+from simplereview.json import json_value
+
 
 class UnifiedDiffParser(object):
 
@@ -87,7 +91,9 @@ class Diff(object):
         self.files = files
 
     def to_json(self):
-        return to_json_list(self.files)
+        return json_list(
+            file_.to_json() for file_ in self.files
+        )
 
 
 class DiffFile(object):
@@ -98,8 +104,13 @@ class DiffFile(object):
         self.chunks = []
 
     def to_json(self):
-        return '{"old":"%s","new":"%s","chunks":%s}' % (
-            self.old, self.new, to_json_list(self.chunks))
+        return json_object({
+            "old":    json_value(self.old),
+            "new":    json_value(self.new),
+            "chunks": json_list(
+                chunk.to_json() for chunk in self.chunks
+            )
+        })
 
 
 class Chunk(object):
@@ -109,8 +120,12 @@ class Chunk(object):
         self.parts = []
 
     def to_json(self):
-        return '{"line":%s,"parts":%s}' % (
-            self.line.to_json(), to_json_list(self.parts))
+        return json_object({
+            "line":  self.line.to_json(),
+            "parts": json_list(
+                part.to_json() for part in self.parts
+            )
+        })
 
 
 class ChunkPart(object):
@@ -120,8 +135,12 @@ class ChunkPart(object):
         self.lines = lines
 
     def to_json(self):
-        return '{"type":"%s","lines":%s}' % (
-            self.type_, to_json_list(self.lines))
+        return json_object({
+            "type":  json_value(self.type_),
+            "lines": json_list(
+                line.to_json() for line in self.lines
+            )
+        })
 
 
 class Line(object):
@@ -131,12 +150,7 @@ class Line(object):
         self.content = content
 
     def to_json(self):
-        return '{"number":"%s","content":"%s"}' % (self.number, json_escape(self.content))
-
-
-def to_json_list(list_):
-    return "[" + ",".join(item.to_json() for item in list_) + "]"
-
-
-def json_escape(string):
-    return string.replace('"', '\\"')
+        return json_object({
+            "number":  json_value(self.number),
+            "content": json_value(self.content)
+        })

@@ -1,3 +1,8 @@
+from simplereview.json import json_list
+from simplereview.json import json_object
+from simplereview.json import json_value
+
+
 class Review(object):
 
     def __init__(self, id_=None, name=None, date=None, diff=None, user=None):
@@ -11,6 +16,11 @@ class Review(object):
     def add_comment(self, comment):
         self.comments.append(comment)
 
+    def comments_json(self):
+        return json_list(
+            comment.to_json() for comment in self.comments
+        )
+
 
 class Comment(object):
 
@@ -20,3 +30,11 @@ class Comment(object):
         self.user = user
         self.text = text
         self.line = line
+
+    def to_json(self):
+        return json_object({
+            "date": json_value(str(self.date)),
+            "user": json_value(self.user),
+            "text": json_value(self.text),
+            "line": json_value(self.line)
+        })

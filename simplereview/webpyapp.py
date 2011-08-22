@@ -11,6 +11,7 @@ TEMPLATE_DIR = os.getenv("TEMPLATE_DIR", "templates/")
 URLS = (
     "/", "list_reviews",
     "/create_review", "create_review",
+    "/review/(.*)/comments_json", "comments_json",
     "/review/(.*)", "review",
     "/review_diff/(.*)", "review_diff",
 )
@@ -31,6 +32,11 @@ class review_diff:
     def GET(self, id_):
         web.header("Content-Type", "application/json")
         return diff_parser.parse(repo.find_by_id(id_).diff).to_json()
+
+class comments_json:
+    def GET(self, id_):
+        web.header("Content-Type", "application/json")
+        return repo.find_by_id(id_).comments_json()
 
 class create_review:
     def POST(self):

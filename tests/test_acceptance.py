@@ -20,7 +20,7 @@ class AcceptanceTest(unittest.TestCase):
 
     def start_server(self):
         os.putenv("DB_PATH", os.path.join(self.tmp_dir, "foo.db"))
-        self.server_process = subprocess.Popen(["python", "simplereview/webpyapp.py"])
+        self.server_process = subprocess.Popen(["python", "simplereview/webpyapp.py", "8081"])
 
     def wait_for_server_to_start(self):
         time.sleep(1)
@@ -40,7 +40,7 @@ class AcceptanceTest(unittest.TestCase):
         params = urllib.urlencode({
             "name": name
         })
-        urllib.urlopen("http://localhost:8080/create_review", params)
+        urllib.urlopen("http://localhost:8081/create_review", params)
 
     def assert_page_contains(self, page, part):
         content = self.read_content_from(page)
@@ -48,4 +48,4 @@ class AcceptanceTest(unittest.TestCase):
             self.fail("Did not find '%s' in '%s'" % (part, content))
         
     def read_content_from(self, path):
-        return urllib.urlopen("http://localhost:8080%s" % path).read()
+        return urllib.urlopen("http://localhost:8081%s" % path).read()

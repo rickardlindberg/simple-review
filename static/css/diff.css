@@ -1,39 +1,36 @@
-#diff {
+.diff {
     font-family: Monospace;
 }
 
-#diff .file {
+.diff .file {
     border: 1px solid #000000;
     margin-top: 20px;
     margin-bottom: 20px;
 }
 
-#diff .file-header {
+.diff .file-header {
     padding: 5px;
     background: #cccccc;
     border-bottom: 1px solid #999999;
 }
 
-#diff .line {
-}
-
-#diff .added {
+.diff .line-added {
     background: #00ff00;
 }
 
-#diff .removed {
+.diff .line-removed {
     background: #ff0000;
 }
 
-#diff .hunk {
+.diff .line-hunk {
     background: #cccccc;
 }
 
-#diff .context {
+.diff .line-context {
     background: #f5f5f5;
 }
 
-#diff .margin {
+.diff .margin {
     float: left;
     width: 50px;
     background: #cccccc;

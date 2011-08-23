@@ -4,8 +4,7 @@ $def with(review)
 
 <h1>Review: $review.name</h1>
 
-<div id="diff">
-</div>
+<div id="diff-container"></div>
 
 <ul>
 $for comment in review.comments:
@@ -13,5 +12,7 @@ $for comment in review.comments:
 </ul>
 
 <script type="text/javascript">
-    diff($$("diff"), $review.id_)
+$$(document).ready(function () {
+    DiffLoader.load($review.id_, $$("#diff-container"));
+});
 </script>

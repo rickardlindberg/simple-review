@@ -3,6 +3,21 @@ var DiffLoader = {
     load: function (review_id, containerElement) {
         $.getJSON("/review_diff/" + review_id, function (diffJson) {
             DiffDomBuilder.build(diffJson).appendTo(containerElement);
+            CommentLoader.load(review_id);
+        });
+    }
+
+};
+
+var CommentLoader = {
+
+    load: function (review_id) {
+        $.getJSON("/review/" + review_id + "/comments_json", function (commentsJson) {
+            $.each(commentsJson, function (i, comment) {
+                if (comment.line !== "-1") {
+                    $("#line-margin-" + comment.line).show();
+                }
+            });
         });
     }
 
@@ -38,7 +53,8 @@ var DiffDomBuilder = {
 
     _buildLine: function (type, jsonLine) {
         return $("<div/>").addClass("line-" + type).append(
-            $("<div/>").addClass("margin").text(jsonLine.number),
+            $("<div/>").addClass("margin").append(
+                $("<div id=\"line-margin-"+jsonLine.number+"\"/>").addClass("margin-content").html('<img src="/static/images/comment.png" border="0" />').hide()),
             $("<pre/>").text(jsonLine.content));
     }
 

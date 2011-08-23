@@ -30,12 +30,24 @@
     background: #f5f5f5;
 }
 
+.diff .line-added   { height: 20px; }
+.diff .line-removed { height: 20px; }
+.diff .line-hunk    { height: 20px; }
+.diff .line-context { height: 20px; }
+
 .diff .margin {
     float: left;
     width: 50px;
+    height: 20px;
     background: #cccccc;
     background: #ff00ff;
     border-right: #999999;
+}
+
+.diff .margin-content {
+}
+
+.diff .margin-content img {
 }
 
 pre {

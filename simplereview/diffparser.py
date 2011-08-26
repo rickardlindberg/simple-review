@@ -78,7 +78,7 @@ class Diff(object):
 
     def to_json(self):
         return json_list(
-            f.to_json() for f in self.files
+            file_.to_json() for file_ in self.files
         )
 
 
@@ -94,7 +94,7 @@ class File(object):
             "old": json_value(self.old),
             "new": json_value(self.new),
             "lines": json_list(
-                l.to_json() for l in self.lines
+                line.to_json() for line in self.lines
             ),
         })
 

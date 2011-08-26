@@ -1,5 +1,5 @@
-import unittest
 import re
+import unittest
 
 from simplereview.diffparser import parse
 

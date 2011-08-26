@@ -41,18 +41,13 @@ var DiffDomBuilder = {
     },
 
     _buildLines: function (fileDiv, diffedFile) {
-        $.each(diffedFile.hunks, function (i, hunk) {
-            DiffDomBuilder._buildLine("hunk", hunk.line).appendTo(fileDiv);
-            $.each(hunk.parts, function (i, part) {
-                $.each(part.lines, function (i, line) {
-                    DiffDomBuilder._buildLine(part.type, line).appendTo(fileDiv);
-                });
-            });
+        $.each(diffedFile.lines, function (i, line) {
+            DiffDomBuilder._buildLine(line).appendTo(fileDiv);
         });
     },
 
-    _buildLine: function (type, jsonLine) {
-        return $("<div/>").addClass("line-" + type).append(
+    _buildLine: function (jsonLine) {
+        return $("<div/>").addClass("line-" + jsonLine.type).append(
             $("<div/>").addClass("margin").append(
                 $("<div id=\"line-margin-"+jsonLine.number+"\"/>").addClass("margin-content").html('<img src="/static/images/comment.png" border="0" />').hide()),
             $("<pre/>").text(jsonLine.content));

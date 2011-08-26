@@ -1,3 +1,8 @@
+from simplereview.json import json_list
+from simplereview.json import json_object
+from simplereview.json import json_value
+
+
 def parse(diff_text):
     return DiffParser().parse(diff_text)
 
@@ -71,6 +76,11 @@ class Diff(object):
     def __init__(self, files):
         self.files = files
 
+    def to_json(self):
+        return json_list(
+            f.to_json() for f in self.files
+        )
+
 
 class File(object):
 
@@ -79,6 +89,15 @@ class File(object):
         self.new = new
         self.lines = lines
 
+    def to_json(self):
+        return json_object({
+            "old": json_value(self.old),
+            "new": json_value(self.new),
+            "lines": json_list(
+                l.to_json() for l in self.lines
+            ),
+        })
+
 
 class Line(object):
 
@@ -86,3 +105,10 @@ class Line(object):
         self.number = number
         self.content = content
         self.type_ = type_
+
+    def to_json(self):
+        return json_object({
+            "number": json_value(self.number),
+            "content": json_value(self.content),
+            "type": json_value(self.type_),
+        })

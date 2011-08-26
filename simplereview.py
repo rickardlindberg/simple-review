@@ -2,7 +2,7 @@
 
 import os
 
-from simplereview.newdiffparser import parse
+from simplereview.diffparser import parse
 from simplereview.domain import Review
 from simplereview.repositories import SqliteReviewRepository
 

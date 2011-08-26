@@ -1,160 +1,114 @@
-import re
-
 from simplereview.json import json_list
 from simplereview.json import json_object
 from simplereview.json import json_value
 
 
-def parse(unified_diff_string):
-    return UnifiedDiffParser().parse(unified_diff_string)
+def parse(diff_text):
+    return DiffParser().parse(diff_text)
 
 
-class UnifiedDiffParser(object):
+class DiffParser(object):
 
-    def parse(self, unified_diff_string):
-        self._store_lines(unified_diff_string)
-        self._parse_files()
-        return UnifiedDiff(self._files)
-
-    def _store_lines(self, unified_diff_string):
-        self._lines = []
-        number = 0
-        for line in unified_diff_string.split("\n"):
-            self._lines.append(Line(number, line))
-            number += 1
+    def parse(self, diff_text):
+        self.reader = LineReader(diff_text)
+        return Diff(self._parse_files())
 
     def _parse_files(self):
-        self._files = []
-        while self._has_more_lines():
-            self._parse_file()
+        files = []
+        while self.reader.has_line():
+            self._skip_to_file()
+            files.append(self._read_file())
+        return files
 
-    def _parse_file(self):
-        self._parse_file_header()
-        self._parse_hunks()
+    def _skip_to_file(self):
+        while not self.reader.peek().startswith("---"):
+            self.reader.pop_line()
 
-    def _parse_file_header(self):
-        self._skip_to_old_file()
+    def _read_file(self):
         old = self._parse_file_name()
         new = self._parse_file_name()
-        self._current_file = DiffedFile(old, new)
-        self._files.append(self._current_file)
-
-    def _skip_to_old_file(self):
-        while not self._get_current_line().startswith("---"):
-            self._pop_line()
+        lines = self._parse_lines()
+        return File(old, new, lines)
 
     def _parse_file_name(self):
-        line = self._pop_line().content
-        return line[4:]
+        return self.reader.pop_line()[1][4:]
 
-    def _parse_hunks(self):
-        while self._has_more_lines() and self._get_current_line().startswith("@@"):
-            self._current_hunk = Hunk(self._pop_line())
-            self._current_file.hunks.append(self._current_hunk)
-            self._parse_diff_part()
-
-    def _parse_diff_part(self):
-        while self._has_more_lines():
-            if self._get_current_line().startswith(" "):
-                self._parse_context_lines()
-            elif self._get_current_line().startswith("-"):
-                self._parse_removed_lines()
-            elif self._get_current_line().startswith("+"):
-                self._parse_added_lines()
-            else:
-                return
-
-    def _parse_context_lines(self):
-        self._parse_lines_starting_with(" ", "context")
-
-    def _parse_removed_lines(self):
-        self._parse_lines_starting_with("-", "removed")
-
-    def _parse_added_lines(self):
-        self._parse_lines_starting_with("+", "added")
-
-    def _parse_lines_starting_with(self, prefix, type_):
+    def _parse_lines(self):
         lines = []
-        while self._has_more_lines() and self._get_current_line().startswith(prefix):
-            lines.append(self._pop_line())
-        self._current_hunk.parts.append(HunkPart(type_, lines))
-    
-    def _has_more_lines(self):
-        return len(self._lines) > 0
+        while self.reader.has_line() and self.reader.peek()[0] in "+-@ \\":
+            (number, content) = self.reader.pop_line()
+            line = Line(number, content, self._get_line_type(content))
+            lines.append(line)
+        return lines
 
-    def _get_current_line(self):
-        return self._lines[0].content
+    def _get_line_type(self, content):
+        return {
+            "@": "hunk",
+            " ": "context",
+            "+": "added",
+            "-": "removed",
+            "\\": "context",
+        }.get(content[0], "")
 
-    def _pop_line(self):
-        return self._lines.pop(0)
+
+class LineReader(object):
+
+    def __init__(self, text):
+        self._split_lines(text)
+
+    def _split_lines(self, text):
+        self.lines = text.split("\n")
+        for i in range(len(self.lines)):
+            self.lines[i] = (i+1, self.lines[i])
+
+    def peek(self):
+        return self.lines[0][1]
+
+    def pop_line(self):
+        return self.lines.pop(0)
+
+    def has_line(self):
+        return len(self.lines) > 0
 
 
-class UnifiedDiff(object):
+class Diff(object):
 
     def __init__(self, files):
         self.files = files
 
     def to_json(self):
         return json_list(
-            file_.to_json() for file_ in self.files
+            f.to_json() for f in self.files
         )
 
 
-class DiffedFile(object):
+class File(object):
 
-    def __init__(self, old, new):
+    def __init__(self, old, new, lines):
         self.old = old
         self.new = new
-        self.hunks = []
-
-    def to_json(self):
-        return json_object({
-            "old":   json_value(self.old),
-            "new":   json_value(self.new),
-            "hunks": json_list(
-                hunk.to_json() for hunk in self.hunks
-            )
-        })
-
-
-class Hunk(object):
-
-    def __init__(self, line):
-        self.line = line
-        self.parts = []
-
-    def to_json(self):
-        return json_object({
-            "line":  self.line.to_json(),
-            "parts": json_list(
-                part.to_json() for part in self.parts
-            )
-        })
-
-
-class HunkPart(object):
-
-    def __init__(self, type_, lines):
-        self.type_ = type_
         self.lines = lines
 
     def to_json(self):
         return json_object({
-            "type":  json_value(self.type_),
+            "old": json_value(self.old),
+            "new": json_value(self.new),
             "lines": json_list(
-                line.to_json() for line in self.lines
-            )
+                l.to_json() for l in self.lines
+            ),
         })
 
 
 class Line(object):
-    
-    def __init__(self, number, content):
+
+    def __init__(self, number, content, type_):
         self.number = number
         self.content = content
+        self.type_ = type_
 
     def to_json(self):
         return json_object({
-            "number":  json_value(self.number),
-            "content": json_value(self.content)
+            "number": json_value(self.number),
+            "content": json_value(self.content),
+            "type": json_value(self.type_),
         })

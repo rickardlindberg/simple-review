@@ -5,6 +5,10 @@ from simplereview.json import json_object
 from simplereview.json import json_value
 
 
+def parse(unified_diff_string):
+    return UnifiedDiffParser().parse(unified_diff_string)
+
+
 class UnifiedDiffParser(object):
 
     def parse(self, unified_diff_string):

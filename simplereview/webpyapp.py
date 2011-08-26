@@ -12,6 +12,7 @@ URLS = (
     "/", "list_reviews",
     "/create_review", "create_review",
     "/review/(.*)/comments_json", "comments_json",
+    "/review/(.*)/add_comment", "add_comment",
     "/review/(.*)", "review",
     "/review_diff/(.*)", "review_diff",
 )
@@ -37,6 +38,12 @@ class comments_json:
     def GET(self, id_):
         web.header("Content-Type", "application/json")
         return repo.find_by_id(id_).comments_json()
+
+class add_comment:
+    def POST(self, review_id):
+        i = web.webapi.input()
+        repo.add_comment(review_id, i.author, i.comment)
+        web.seeother("/review/%s" % review_id)
 
 class create_review:
     def POST(self):

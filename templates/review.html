@@ -11,6 +11,12 @@ $for comment in review.comments:
     <li>$comment.text (by <b>$comment.user</b> at $comment.date)</li>
 </ul>
 
+<form action="/review/$review.id_/add_comment" method="post">
+    Your name: <input type="text" name="author" /><br />
+    <textarea name="comment"></textarea>
+    <input type="submit" value="Send" />
+</form>
+
 <script type="text/javascript">
 $$(document).ready(function () {
     DiffLoader.load($review.id_, $$("#diff-container"));

@@ -5,16 +5,14 @@ from simplereview.json import json_value
 
 class Review(object):
 
-    def __init__(self, id_=None, name=None, date=None, diff=None, user=None):
+    def __init__(self, id_=None, name=None, date=None, diff=None, user=None,
+                 comments=None):
         self.id_ = id_
         self.name = name
         self.date = date
         self.diff = diff
         self.user = user
-        self.comments = []
-
-    def add_comment(self, comment):
-        self.comments.append(comment)
+        self.comments = comments
 
     def comments_json(self):
         return json_list(

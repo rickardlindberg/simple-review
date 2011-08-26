@@ -70,17 +70,19 @@ class SqliteReviewRepository(ReviewRepository):
             name=row["name"],
             date=row["date"],
             diff=row["diff"],
-            user=row["user"]
+            user=row["user"],
+            comments=self._fetch_comments(row["id"]),
         )
-        self._add_comments(review)
         return review
 
-    def _add_comments(self, review):
+    def _fetch_comments(self, review_id):
         def execute_select_query(cursor):
-            cursor.execute("select * from comments where review_id=? order by date asc", str(review.id_))
+            comments = []
+            cursor.execute("select * from comments where review_id=? order by date asc", str(review_id))
             for row in cursor:
-                review.add_comment(self._row_to_comment(row))
-        self._with_cursor(execute_select_query)
+                comments.append(self._row_to_comment(row))
+            return comments
+        return self._with_cursor(execute_select_query)
 
     def _row_to_comment(self, row):
         return Comment(

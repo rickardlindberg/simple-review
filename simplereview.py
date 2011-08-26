@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 
 import os
+import os.path
+import sys
+
+ROOT = os.path.dirname(__file__)
+sys.path.insert(0, os.path.join(ROOT, "libs", "web.py-0.36"))
 
 from simplereview.diffparser import parse
 from simplereview.domain import Review

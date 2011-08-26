@@ -38,7 +38,9 @@ class AcceptanceTest(unittest.TestCase):
 
     def add_review_with_name(self, name):
         params = urllib.urlencode({
-            "name": name
+            "name": name,
+            "diff": "",
+            "user": ""
         })
         urllib.urlopen("http://localhost:8081/create_review", params)
 

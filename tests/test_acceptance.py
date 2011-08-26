@@ -20,7 +20,7 @@ class AcceptanceTest(unittest.TestCase):
 
     def start_server(self):
         os.putenv("DB_PATH", os.path.join(self.tmp_dir, "foo.db"))
-        self.server_process = subprocess.Popen(["python", "simplereview/webpyapp.py", "8081"])
+        self.server_process = subprocess.Popen(["python", "simplereview.py", "8081"])
 
     def wait_for_server_to_start(self):
         time.sleep(1)

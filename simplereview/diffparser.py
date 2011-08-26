@@ -35,7 +35,7 @@ class DiffParser(object):
 
     def _parse_lines(self):
         lines = []
-        while self.reader.has_line() and self.reader.peek()[0] in "+-@ \\":
+        while self.reader.has_line() and self.reader.peek()[:1] in "+-@ \\":
             (number, content) = self.reader.pop_line()
             line = Line(number, content, self._get_line_type(content))
             lines.append(line)
@@ -44,11 +44,12 @@ class DiffParser(object):
     def _get_line_type(self, content):
         return {
             "@": "hunk",
+            "": "context",
             " ": "context",
             "+": "added",
             "-": "removed",
             "\\": "context",
-        }.get(content[0], "")
+        }.get(content[:1], "")
 
 
 class LineReader(object):

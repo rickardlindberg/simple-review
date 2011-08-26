@@ -74,6 +74,20 @@ class DiffParserTest(unittest.TestCase):
         """)
         self.assertEquals("context", self.diff.files[0].lines[1].type_)
 
+    def test_treat_empty_lines_as_context_lines(self):
+        self.when_parsing("""
+        diff --git a/.bashrc b/.bashrc
+        index bef78b2..17e71d9 100644
+        --- a/.bashrc
+        +++ b/.bashrc
+        @@ -9,4 +9,3 @@ fi
+
+         . ~/.bashrc_files/hg.sh
+         . ~/.bashrc_files/diff.sh
+        -. ~/.bashrc_files/prompt.sh
+        """)
+        self.assertEquals("context", self.diff.files[0].lines[1].type_)
+
     def test_includes_type_for_removed_lines(self):
         self.when_parsing("""
         diff --git a/.bashrc b/.bashrc

@@ -2,6 +2,19 @@ $def with(review)
 
 <h1>Review: $review.name</h1>
 
+<div id="line-comment-form">
+  <form action="/review/$review.id_/add_comment" method="post">
+    <input type="hidden" name="number" value="-1" id="linenum" />
+    <div class="comment-form">
+      <div class="header">
+        Your name: <input type="text" name="author" />
+      </div>
+      <textarea name="comment"></textarea>
+    </div>
+    <input type="submit" value="Send" />
+  </form>
+</div>
+
 <div class="diff">
 $for file in review.parsed_diff().files:
     <div class="file">
@@ -9,8 +22,13 @@ $for file in review.parsed_diff().files:
     $for line in file.lines:
         <div class="line-$line.type_">
             <div class="margin">
-                <div id="line-margin-$line.number" class="margin-content" style="display: none;">
-                    <img border="0" src="/static/images/comment.png">
+                <div id="line-margin-$line.number" class="margin-content">
+                    <a href="#" class="has-comment" style="display: none;">
+                        <img border="0" src="/static/images/comment.png" />
+                    </a>
+                    <a href="#" class="add-comment" style="display: none;">
+                        <img border="0" src="/static/images/add.png" />
+                    </a>
                 </div>
             </div>
             <pre>$line.content</pre>
@@ -35,6 +53,7 @@ $for comment in review.comments:
 <h2>Post comment</h2>
 
 <form action="/review/$review.id_/add_comment" method="post">
+  <input type="hidden" name="number" value="-1" />
   <div class="comment-form">
     <div class="header">
       Your name: <input type="text" name="author" />
@@ -48,4 +67,26 @@ $for comment in review.comments:
 $$(document).ready(function () {
     CommentLoader.load($review.id_);
 });
+
+$$(".margin").hover(
+    function () {
+        $$(this).find(".add-comment").show();
+    },
+    function () {
+        $$(this).find(".add-comment").hide();
+    }
+);
+
+$$(".add-comment").click(
+    function (event) {
+        var id = $$(this).parent().attr("id");
+        var line = id.substring(id.lastIndexOf("-") + 1);
+        var pos = $$(this).offset();
+        $$("#linenum").val(line);
+        $$("#line-comment-form").css("top", (pos.top + 20) + "px");
+        $$("#line-comment-form").css("left", (pos.left + 20) + "px");
+        $$("#line-comment-form").show();
+        event.preventDefault();
+    }
+);
 </script>

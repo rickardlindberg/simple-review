@@ -8,3 +8,14 @@
   margin-top: 18px;
   margin-bottom: 18px;
 }
+
+#line-comment-form {
+    display: none;
+    position: fixed; 
+    width: 300px;
+}
+
+#line-comment-form textarea {
+    width: 300px;
+    height: 80px;
+}

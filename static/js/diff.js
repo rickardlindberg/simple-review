@@ -4,7 +4,7 @@ var CommentLoader = {
         $.getJSON("/review/" + review_id + "/comments_json", function (commentsJson) {
             $.each(commentsJson, function (i, comment) {
                 if (comment.line !== "-1") {
-                    $("#line-margin-" + comment.line).show();
+                    $("#line-margin-" + comment.line + " .has-comment").show();
                 }
             });
         });

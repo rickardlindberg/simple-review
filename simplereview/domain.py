@@ -1,3 +1,5 @@
+import web
+
 from simplereview.diffparser import parse
 from simplereview.json import json_list
 from simplereview.json import json_object
@@ -41,10 +43,10 @@ class Comment(object):
 
     def to_json(self):
         return json_object({
-            "date": json_value(str(self.date)),
-            "user": json_value(self.user),
-            "text": json_value(self.text),
-            "line": json_value(self.line)
+            "date": json_value(web.websafe(self.formatted_date())),
+            "user": json_value(web.websafe(self.user)),
+            "text": json_value(web.websafe(self.text)),
+            "line": json_value(web.websafe(self.line))
         })
 
 

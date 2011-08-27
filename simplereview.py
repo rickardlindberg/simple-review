@@ -7,6 +7,7 @@ import sys
 ROOT = os.path.dirname(__file__)
 sys.path.insert(0, os.path.join(ROOT, "libs", "web.py-0.36"))
 
+from simplereview.commentgrouper import CommentGrouper
 from simplereview.domain import Review
 from simplereview.repositories import SqliteReviewRepository
 from simplereview.reviewlist import ReviewList
@@ -35,7 +36,7 @@ class create_review:
 class comments_json:
     def GET(self, review_id):
         web.header("Content-Type", "application/json")
-        return repo.find_by_id(review_id).comments_json()
+        return CommentGrouper(repo.find_by_id(review_id).comments).to_json()
 
 class add_comment:
     def POST(self, review_id):

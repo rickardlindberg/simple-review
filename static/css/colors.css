@@ -41,3 +41,8 @@ ul.comments .header {
 .comment-form {
     background: #cccccc;
 }
+
+.line-comments {
+    background: #f4f4f4;
+    border-color: #cccccc;
+}

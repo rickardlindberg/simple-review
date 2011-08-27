@@ -71,9 +71,11 @@ $$(document).ready(function () {
 $$(".margin").hover(
     function () {
         $$(this).find(".add-comment").show();
+        $$(this).find(".line-comments").show();
     },
     function () {
         $$(this).find(".add-comment").hide();
+        $$(this).find(".line-comments").hide();
     }
 );
 

@@ -2,10 +2,12 @@ $def with(list)
 
 <h1>Latest reviews</h1>
 
-<ul>
-$for review in list:
-    <li>
-        <a href="/review/$review.id_">$review.name</a>
-        (by <b>$review.user</b> at $review.date)
-    </li>
-</ul>
+$for section in list.sections:
+    <h2>$section.name</h2>
+    <ul>
+    $for review in section.reviews:
+        <li>
+            <a href="/review/$review.id_">$review.name</a>
+            (by <b>$review.user</b> at $review.date)
+        </li>
+    </ul>

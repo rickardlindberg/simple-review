@@ -10,6 +10,7 @@ sys.path.insert(0, os.path.join(ROOT, "libs", "web.py-0.36"))
 from simplereview.diffparser import parse
 from simplereview.domain import Review
 from simplereview.repositories import SqliteReviewRepository
+from simplereview.reviewlist import ReviewList
 
 import web
 
@@ -26,7 +27,7 @@ urls = (
 
 class list_reviews:
     def GET(self):
-        return render.list_reviews(repo.list_by_date())
+        return render.list_reviews(ReviewList(repo.list_by_date()))
 
 class create_review:
     def POST(self):

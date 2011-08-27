@@ -23,7 +23,7 @@ $for file in review.parsed_diff().files:
 
 <ul>
 $for comment in review.comments:
-    <li>$comment.text (by <b>$comment.user</b> at $comment.date)</li>
+    <li>$comment.text (by <b>$comment.user</b> at $comment.formatted_date())</li>
 </ul>
 
 <form action="/review/$review.id_/add_comment" method="post">

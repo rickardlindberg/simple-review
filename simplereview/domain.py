@@ -23,6 +23,9 @@ class Review(object):
     def parsed_diff(self):
         return parse(self.diff)
 
+    def formatted_date(self):
+        return format_date(self.date)
+
 
 class Comment(object):
 
@@ -33,6 +36,9 @@ class Comment(object):
         self.text = text
         self.line = line
 
+    def formatted_date(self):
+        return format_date(self.date)
+
     def to_json(self):
         return json_object({
             "date": json_value(str(self.date)),
@@ -40,3 +46,7 @@ class Comment(object):
             "text": json_value(self.text),
             "line": json_value(self.line)
         })
+
+
+def format_date(date):
+    return date.strftime("%d %b %Y")

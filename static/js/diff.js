@@ -8,8 +8,11 @@ var CommentLoader = {
 
                     var commentsDiv = $("<div/>").addClass("line-comments");
                     $.each(commentsJson[line], function (i, comment) {
+                        if (i !== 0) {
+                            commentsDiv.append($("<hr/>"));
+                        }
                         commentsDiv.append($("<div/>").addClass("line-comment").html(
-                            "by <b>" + comment.user + "</b> at " + comment.date +
+                            "<i>by <b>" + comment.user + "</b> at " + comment.date + "</i><br />" +
                             comment.text
                         ));
                     });

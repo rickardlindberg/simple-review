@@ -20,15 +20,15 @@ $for file in review.parsed_diff().files:
     <div class="file">
         <div class="file-header">$file.old</div>
     $for line in file.lines:
-        <div class="line-$line.type_">
-            <div class="margin">
-                <div id="line-margin-$line.number" class="margin-content">
-                    <a href="#" class="has-comment" style="display: none;">
-                        <img border="0" src="/static/images/comment.png" />
-                    </a>
+        <div class="line line-$line.type_">
+            <div id="line-margin-$line.number" class="margin">
+                <div class="margin-col">
                     <a href="#" class="add-comment" style="display: none;">
                         <img border="0" src="/static/images/add.png" />
                     </a>
+                </div>
+                <div class="margin-col">
+                    <img border="0" src="/static/images/comment.png" class="has-comment" style="display: none;" />
                 </div>
             </div>
             <pre>$line.content</pre>
@@ -70,6 +70,10 @@ $$(document).ready(function () {
 
 $$(".margin").hover(
     function () {
+        var pos = $$(this).find(".has-comment").offset();
+        $$(this).find(".line-comments").css("top", (pos.top + 20) + "px");
+        $$(this).find(".line-comments").css("left", (pos.left) + "px");
+
         $$(this).find(".add-comment").show();
         $$(this).find(".line-comments").show();
     },
@@ -81,7 +85,7 @@ $$(".margin").hover(
 
 $$(".add-comment").click(
     function (event) {
-        var id = $$(this).parent().attr("id");
+        var id = $$(this).parent().parent().attr("id");
         var line = id.substring(id.lastIndexOf("-") + 1);
         var pos = $$(this).offset();
         $$("#linenum").val(line);

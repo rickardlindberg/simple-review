@@ -1,5 +1,4 @@
 $def with(content)
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
 "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -7,9 +6,26 @@ $def with(content)
     <title>Simple Review</title>
     <script type="text/javascript" src="/static/js/lib/jquery.min.js"></script>
     <script type="text/javascript" src="/static/js/diff.js"></script>
+    <link rel="stylesheet" href="/static/css/blueprint/screen.css" type="text/css" media="screen, projection">
+    <link rel="stylesheet" href="/static/css/blueprint/print.css" type="text/css" media="print"> 
+    <!--[if lt IE 8]>
+      <link rel="stylesheet" href="/static/css/blueprint/ie.css" type="text/css" media="screen, projection">
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="/static/css/layout.css">
     <link rel="stylesheet" type="text/css" href="/static/css/diff.css">
   </head>
   <body>
-    $:content
+    <div id="header">
+      <div class="container">
+        <div class="span-24">
+          <b>Simple review</b> | <a href="/">Review list</a>
+        </div>
+      </div>
+    </div>
+    <div id="content" class="container">
+      <div class="span-24">
+        $:content
+      </div>
+    </div>
   </body>
 </html>

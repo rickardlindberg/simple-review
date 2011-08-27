@@ -10,20 +10,20 @@
 
 .diff .file-header {
     padding: 5px;
-    background: #cccccc;
+    background: #DCDCDC;
     border-bottom: 1px solid #999999;
 }
 
 .diff .line-added {
-    background: #00ff00;
+    background: #B3F6AF;
 }
 
 .diff .line-removed {
-    background: #ff0000;
+    background: #F6B1AF;
 }
 
 .diff .line-hunk {
-    background: #cccccc;
+    background: #DCEDEE;
 }
 
 .diff .line-context {
@@ -39,9 +39,8 @@
     float: left;
     width: 50px;
     height: 20px;
-    background: #cccccc;
-    background: #ff00ff;
-    border-right: #999999;
+    background: #DCDCDC;
+    border-right: 1px solid #999999;
 }
 
 .diff .margin-content {
@@ -52,5 +51,5 @@
 
 pre {
     margin: 0px;
-    padding: 0px;
+    padding: 2px;
 }

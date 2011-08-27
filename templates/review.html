@@ -1,7 +1,5 @@
 $def with(review)
 
-<a href="/">Return to list</a>
-
 <h1>Review: $review.name</h1>
 
 <div class="diff">
@@ -20,6 +18,7 @@ $for file in review.parsed_diff().files:
     </div>
 </div>
 
+<h2>Comments</h2>
 
 <ul>
 $for comment in review.comments:

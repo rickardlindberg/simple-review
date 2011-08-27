@@ -49,7 +49,7 @@ class SqliteReviewRepository(ReviewRepository):
 
     def find_by_id(self, id_):
         def execute_select_query(cursor):
-            cursor.execute("select * from reviews where id=?", str(id_))
+            cursor.execute("select * from reviews where id=?", (str(id_),))
             return self._row_to_review(cursor.fetchone())
         return self._with_cursor(execute_select_query)
 
@@ -78,7 +78,7 @@ class SqliteReviewRepository(ReviewRepository):
     def _fetch_comments(self, review_id):
         def execute_select_query(cursor):
             comments = []
-            cursor.execute("select * from comments where review_id=? order by date asc", str(review_id))
+            cursor.execute("select * from comments where review_id=? order by date asc", (str(review_id),))
             for row in cursor:
                 comments.append(self._row_to_comment(row))
             return comments

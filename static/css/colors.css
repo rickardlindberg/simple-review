@@ -32,3 +32,12 @@
 .diff .line-context {
     background: #f5f5f5;
 }
+
+ul.comments .header {
+    background: #DCDCDC;
+    border-color: #999999;
+}
+
+.comment-form {
+    background: #cccccc;
+}

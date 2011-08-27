@@ -35,3 +35,49 @@ pre {
     margin: 0px;
     padding: 2px;
 }
+
+ul.comments {
+  margin-left: 0px;
+  margin-right: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+ul.comments li {
+  border: 1px solid;
+  list-style: none;
+  margin-bottom: 18px;
+}
+
+ul.comments .header {
+  border-bottom: 1px solid;
+  padding: 5px;
+}
+
+ul.comments .body {
+  padding: 5px;
+}
+
+.comment-form {
+    padding: 5px;
+}
+
+.comment-form .header {
+    padding: 0px;
+    margin: 0px;
+    margin-bottom: 5px;
+}
+
+.comment-form input {
+    padding: 0px;
+    margin: 0px;
+}
+
+.comment-form textarea {
+    padding: 0px;
+    margin: 0px;
+}
+
+.comment-form textarea {
+    width: 100%;
+}

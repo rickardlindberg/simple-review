@@ -20,15 +20,28 @@ $for file in review.parsed_diff().files:
 
 <h2>Comments</h2>
 
-<ul>
+<ul class="comments">
 $for comment in review.comments:
-    <li>$comment.text (by <b>$comment.user</b> at $comment.formatted_date())</li>
+  <li>
+    <div class="header">
+      by <b>$comment.user</b> at $comment.formatted_date()
+    </div>
+    <div class="body">
+      $comment.text
+    </div>
+  </li>
 </ul>
 
+<h2>Post comment</h2>
+
 <form action="/review/$review.id_/add_comment" method="post">
-    Your name: <input type="text" name="author" /><br />
+  <div class="comment-form">
+    <div class="header">
+      Your name: <input type="text" name="author" />
+    </div>
     <textarea name="comment"></textarea>
-    <input type="submit" value="Send" />
+  </div>
+  <input type="submit" value="Send" />
 </form>
 
 <script type="text/javascript">

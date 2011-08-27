@@ -4,7 +4,22 @@ $def with(review)
 
 <h1>Review: $review.name</h1>
 
-<div id="diff-container"></div>
+<div class="diff">
+$for file in review.parsed_diff().files:
+    <div class="file">
+        <div class="file-header">$file.old</div>
+    $for line in file.lines:
+        <div class="line-$line.type_">
+            <div class="margin">
+                <div id="line-margin-$line.number" class="margin-content" style="display: none;">
+                    <img border="0" src="/static/images/comment.png">
+                </div>
+            </div>
+            <pre>$line.content</pre>
+        </div>
+    </div>
+</div>
+
 
 <ul>
 $for comment in review.comments:
@@ -19,6 +34,6 @@ $for comment in review.comments:
 
 <script type="text/javascript">
 $$(document).ready(function () {
-    DiffLoader.load($review.id_, $$("#diff-container"));
+    CommentLoader.load($review.id_);
 });
 </script>

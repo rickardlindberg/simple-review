@@ -7,7 +7,6 @@ import sys
 ROOT = os.path.dirname(__file__)
 sys.path.insert(0, os.path.join(ROOT, "libs", "web.py-0.36"))
 
-from simplereview.diffparser import parse
 from simplereview.domain import Review
 from simplereview.repositories import SqliteReviewRepository
 from simplereview.reviewlist import ReviewList
@@ -22,7 +21,6 @@ urls = (
     "/review/(.*)/comments_json", "comments_json",
     "/review/(.*)/add_comment", "add_comment",
     "/review/(.*)", "review",
-    "/review_diff/(.*)", "review_diff",
 )
 
 class list_reviews:
@@ -48,11 +46,6 @@ class add_comment:
 class review:
     def GET(self, review_id):
         return render.review(repo.find_by_id(review_id))
-
-class review_diff:
-    def GET(self, review_id):
-        web.header("Content-Type", "application/json")
-        return parse(repo.find_by_id(review_id).diff).to_json()
 
 if __name__ == "__main__":
     web.application(urls, globals()).run()

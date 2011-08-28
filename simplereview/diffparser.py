@@ -1,5 +1,12 @@
 def parse(diff_text):
-    return DiffParser().parse(diff_text)
+    try:
+        return DiffParser().parse(diff_text)
+    except ParseError:
+        return Diff([File(
+            "unknown", "unknown",
+            [Line(number, content, "context") for (number, content) in
+             LineReader(diff_text).pop_all()]
+        )])
 
 
 class DiffParser(object):
@@ -16,7 +23,11 @@ class DiffParser(object):
         return files
 
     def _skip_to_file(self):
-        while not self.reader.peek().startswith("---"):
+        while True:
+            if not self.reader.has_line():
+                raise ParseError("Expected to find file, but reached end instead")
+            if self.reader.peek().startswith("---"):
+                return
             self.reader.pop_line()
 
     def _read_file(self):
@@ -26,6 +37,8 @@ class DiffParser(object):
         return File(old, new, lines)
 
     def _parse_file_name(self):
+        if not self.reader.has_line():
+            raise ParseError("Expected to find file, but reached end instead")
         return self.reader.pop_line()[1][4:]
 
     def _parse_lines(self):
@@ -47,6 +60,10 @@ class DiffParser(object):
         }.get(content[:1], "")
 
 
+class ParseError(Exception):
+    pass
+
+
 class LineReader(object):
 
     def __init__(self, text):
@@ -62,6 +79,11 @@ class LineReader(object):
 
     def pop_line(self):
         return self.lines.pop(0)
+
+    def pop_all(self):
+        all_lines = self.lines
+        self.lines = []
+        return all_lines
 
     def has_line(self):
         return len(self.lines) > 0

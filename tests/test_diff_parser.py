@@ -145,6 +145,21 @@ class DiffParserTest(unittest.TestCase):
         """)
         self.assertEquals(5, self.diff.files[0].lines[0].number)
 
+    def test_ill_formatted_diff_has_one_bogus_file_with_only_context_lines(self):
+        self.when_parsing("""
+        diff --git a/.bashrc b/.bashrc
+        index bef78b2..17e71d9 100644
+        --- a/.bashrc
+        +++ b/.bashrc
+        @@ -9,4 +9,3 @@ fi
+         . ~/.bashrc_files/diff.sh
+        -. ~/.bashrc_files/prompt.sh
+        ill formed line
+        """)
+        self.assertEquals(1, len(self.diff.files))
+        self.assertEquals(8, len(self.diff.files[0].lines))
+        self.assertEquals("context", self.diff.files[0].lines[0].type_)
+
     def when_parsing(self, indented_diff_text):
         indent_expression = re.compile(r"^        ", flags=re.MULTILINE)
         diff_text = indent_expression.sub("", indented_diff_text.strip())

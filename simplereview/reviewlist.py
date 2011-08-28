@@ -9,8 +9,8 @@ class ReviewList(object):
         sections = (
             ("Today", self._is_today),
             ("Yesterday", self._was_yeasterday),
-            ("This Week", self._was_this_week),
-            ("Last Week", self._was_last_week),
+            ("This week", self._was_this_week),
+            ("Last week", self._was_last_week),
             ("Older", lambda review: True),
         )
         for (title, criteria) in sections:

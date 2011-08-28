@@ -26,14 +26,14 @@ class ReviewListTest(unittest.TestCase):
         self.when_making_list_from([
             a_review_with_date(2011, 8, 22) # Monday
         ])
-        self.assert_has_sections(["This Week"])
+        self.assert_has_sections(["This week"])
 
     def test_has_section_for_last_week(self):
         self.given_today_is(2011, 8, 25)
         self.when_making_list_from([
             a_review_with_date(2011, 8, 21) # Sunday
         ])
-        self.assert_has_sections(["Last Week"])
+        self.assert_has_sections(["Last week"])
 
     def test_has_section_for_earlier_than_last_week(self):
         self.given_today_is(2011, 8, 25)

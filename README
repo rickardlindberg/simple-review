@@ -4,3 +4,29 @@ text files.
 Changes are posted as unified diffs that are typically generated from a source
 control system. The diff is displayed in a nice format and you can easily leave
 comments on each line or the whole change.
+
+3rd party libraries used:
+
+libs/web
+
+    Used to handle http requests and render html pages.
+
+    Downloaded from http://webpy.org/static/web.py-0.36.tar.gz.
+
+static/css/libs/blueprint
+
+    Used for basic layout and typography.
+
+    Downloaded from https://github.com/joshuaclayton/blueprint-css/zipball/v1.0.1
+
+static/js/libs/jquery.min.js
+
+    Used for line comments on the client.
+
+    Downloaded from http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js
+
+static/js/libs/jquery.cookie.js
+
+    Used to store and retrieve the user name in a cookie.
+
+    Downloaded from https://github.com/carhartl/jquery-cookie/zipball/1.0.0

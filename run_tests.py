@@ -6,7 +6,7 @@ import sys
 import unittest
 
 ROOT = os.path.dirname(__file__)
-sys.path.insert(0, os.path.join(ROOT, "libs", "web.py-0.36"))
+sys.path.insert(0, os.path.join(ROOT, "libs"))
 
 suite = unittest.TestSuite()
 

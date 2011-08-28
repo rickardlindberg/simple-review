@@ -5,6 +5,8 @@ Changes are posted as unified diffs that are typically generated from a source
 control system. The diff is displayed in a nice format and you can easily leave
 comments on each line or the whole change.
 
+See INSTALL for information how to get started using it.
+
 3rd party libraries used:
 
 libs/web

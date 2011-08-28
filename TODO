@@ -2,4 +2,5 @@
 * Indicate in review list if it has comments
 * Highlight differences on every line
 * Migrate db automatically
-* Notify user when another user comments
+* Notify user when another user comments (via ajax popup)
+* Email notifications

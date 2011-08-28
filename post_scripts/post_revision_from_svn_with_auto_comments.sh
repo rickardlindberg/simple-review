@@ -46,7 +46,7 @@ post_comment() {
         --silent \
         --data-urlencode "author=review-bot" \
         --data-urlencode "comment=${1}" \
-        --data-urlencode "number=${line_number}" \
+        --data-urlencode "line_number=${line_number}" \
         ${REVIEW_SERVER}/review/${review_id}/add_comment
 }
 

@@ -7,13 +7,13 @@ class CommentGrouper(object):
     def __init__(self, comments):
         self.group = {}
         for comment in comments:
-            if not self.group.has_key(comment.line):
-                self.group[comment.line] = []
-            self.group[comment.line].append(comment)
+            if not self.group.has_key(comment.line_number):
+                self.group[comment.line_number] = []
+            self.group[comment.line_number].append(comment)
         self.keys = self.group.keys()
 
-    def get(self, line):
-        return self.group[line]
+    def get(self, line_number):
+        return self.group[line_number]
 
     def to_json(self):
         json_group = {}

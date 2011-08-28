@@ -31,15 +31,16 @@ class Review(object):
 
 class Comment(object):
 
-    def __init__(self, review_id=None, date=None, author=None, text=None, line=None):
+    def __init__(self, review_id=None, date=None, author=None, text=None,
+                 line_number=None):
         self.review_id = review_id
         self.date = date
         self.author = author
         self.text = text
-        self.line = line
+        self.line_number = line_number
 
     def is_line_comment(self):
-        return self.line != -1
+        return self.line_number != -1
 
     def formatted_date(self):
         return format_date(self.date)
@@ -49,7 +50,7 @@ class Comment(object):
             "date": json_value(web.websafe(self.formatted_date())),
             "author": json_value(web.websafe(self.author)),
             "text": json_value(web.websafe(self.text)),
-            "line": json_value(web.websafe(self.line))
+            "line_number": json_value(web.websafe(self.line_number))
         })
 
 

@@ -44,7 +44,7 @@ class comments_json:
 class add_comment:
     def POST(self, review_id):
         i = web.webapi.input()
-        config.repo.add_comment(review_id, i.author, i.comment, i.number)
+        config.repo.add_comment(review_id, i.author, i.comment, i.line_number)
         web.seeother("/review/%s" % review_id)
 
 class review:

@@ -72,7 +72,7 @@ class SqliteReviewRepositoryTest(unittest.TestCase):
         review = self.repo.find_by_id(review_id)
         self.assertEquals("rick", review.comments[0].author)
         self.assertEquals("comment", review.comments[0].text)
-        self.assertEquals(5, review.comments[0].line)
+        self.assertEquals(5, review.comments[0].line_number)
 
     def test_adds_date_when_adding_comment(self):
         self.repo.save(Review())

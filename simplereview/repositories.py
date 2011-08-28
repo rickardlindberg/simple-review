@@ -17,7 +17,7 @@ class ReviewRepository(object):
     def find_by_id(self, id_):
         raise NotImplementedError()
 
-    def add_comment(self, review_id, author, text, line=-1):
+    def add_comment(self, review_id, author, text, line_number=-1):
         raise NotImplementedError()
 
 
@@ -54,14 +54,14 @@ class SqliteReviewRepository(ReviewRepository):
             return self._row_to_review(cursor.fetchone())
         return self._with_cursor(execute_select_query)
 
-    def add_comment(self, review_id, author, text, line=-1):
+    def add_comment(self, review_id, author, text, line_number=-1):
         def execute_insert_query(cursor):
-            cursor.execute("insert into comments (review_id, date, author, text, line) values (?, ?, ?, ?, ?)", (
+            cursor.execute("insert into comments (review_id, date, author, text, line_number) values (?, ?, ?, ?, ?)", (
                 review_id,
                 datetime.datetime.now(),
                 author,
                 text,
-                line
+                line_number
             ))
         self._with_cursor(execute_insert_query)
 
@@ -91,7 +91,7 @@ class SqliteReviewRepository(ReviewRepository):
             date=row["date"],
             author=row["author"],
             text=row["text"],
-            line=row["line"]
+            line_number=row["line_number"]
         )
 
     def _create_db(self):
@@ -111,7 +111,7 @@ class SqliteReviewRepository(ReviewRepository):
                 date timestamp,
                 author text,
                 text text,
-                line integer
+                line_number integer
             )
             """)
         self._with_cursor(execute_create_queries)

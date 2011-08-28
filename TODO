@@ -1,6 +1,5 @@
 * Handle ill-formatted diffs
 * Display a better file name for a diffed file
-* Remember user name in cookie and automatically populate form
 * Indicate in review list if it has comments
 * Highlight differences on every line
 * Migrate db automatically

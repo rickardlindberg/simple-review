@@ -3,7 +3,7 @@ $def with(review)
 <h1>Review: $review.title</h1>
 
 <div id="line-comment-form">
-  <form action="/review/$review.id_/add_comment" method="post">
+  <form action="/review/$review.id_/add_comment" method="post" class="addCommentForm">
     <input type="hidden" name="line_number" value="-1" id="linenum" />
     <div class="comment-form">
       <div class="header">
@@ -55,7 +55,7 @@ $for comment in review.comments:
 
 <h2>Post comment</h2>
 
-<form action="/review/$review.id_/add_comment" method="post">
+<form action="/review/$review.id_/add_comment" method="post" class="addCommentForm">
   <input type="hidden" name="line_number" value="-1" />
   <div class="comment-form">
     <div class="header">
@@ -68,6 +68,10 @@ $for comment in review.comments:
 
 <script type="text/javascript">
 $$(document).ready(function () {
+    $$("input[name=author]").val($$.cookie("user_name"));
+    $$(".addCommentForm").submit(function () {
+        $$.cookie("user_name", $$(this).find("input[name=author]").val(), { expires: 100 });
+    });
     registerMarginHoverHandlers();
     registerAddLineCommentClickHandlers();
     loadCommentsFor($review.id_);

@@ -9,42 +9,51 @@ import urllib
 
 class AcceptanceTest(unittest.TestCase):
 
-    def setUp(self):
-        self.tmp_dir = tempfile.mkdtemp("simplereview")
-        self.start_server()
-        self.wait_for_server_to_start()
+    SITE_NAME = "test-site-name"
 
-    def tearDown(self):
-        self.kill_server()
-        shutil.rmtree(self.tmp_dir)
-
-    def start_server(self):
-        os.putenv("DB_PATH", os.path.join(self.tmp_dir, "foo.db"))
-        self.server_process = subprocess.Popen(
-            ["python", "simplereview.py", "8081"],
-            stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-
-    def wait_for_server_to_start(self):
-        time.sleep(1)
-
-    def kill_server(self):
-        self.server_process.kill()
+    def test_has_site_name_as_title(self):
+        self.assert_page_contains("/", "<title>%s</title>" % self.SITE_NAME)
 
     def test_has_review_on_list_page(self):
         self.add_review_with_title("review 1")
         self.assert_page_contains("/", "review 1")
 
     def test_has_review_on_review_page(self):
-        self.add_review_with_title("review 2")
-        self.assert_page_contains("/review/1", "review 2")
+        review_id = self.add_review_with_title("review 2")
+        self.assert_page_contains("/review/%s" % review_id, "review 2")
+
+    def setUp(self):
+        self.tmp_dir = tempfile.mkdtemp("simplereview")
+        self.config_path = os.path.join(self.tmp_dir, "test.config")
+        self.db_path = os.path.join(self.tmp_dir, "test.db")
+        self.start_server()
+        self.wait_for_server_to_start()
+
+    def start_server(self):
+        self.write_config()
+        os.putenv("SIMPLE_REVIEW_CONFIG", self.config_path)
+        self.server_process = subprocess.Popen(
+            ["python", "simplereview.py", "8081"],
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+
+    def write_config(self):
+        f = open(self.config_path, "w")
+        f.write("[site]\n")
+        f.write("name = %s\n" % self.SITE_NAME)
+        f.write("[db]\n")
+        f.write("path = %s\n" % self.db_path)
+        f.close()
+
+    def wait_for_server_to_start(self):
+        time.sleep(1)
 
     def add_review_with_title(self, title):
-        params = urllib.urlencode({
+        request = urllib.urlopen("http://localhost:8081/create_review", urllib.urlencode({
             "title": title,
             "diff": "",
             "diff_author": ""
-        })
-        urllib.urlopen("http://localhost:8081/create_review", params)
+        }))
+        return request.read().strip()
 
     def assert_page_contains(self, page, part):
         content = self.read_content_from(page)
@@ -53,3 +62,10 @@ class AcceptanceTest(unittest.TestCase):
         
     def read_content_from(self, path):
         return urllib.urlopen("http://localhost:8081%s" % path).read()
+
+    def tearDown(self):
+        self.kill_server()
+        shutil.rmtree(self.tmp_dir)
+
+    def kill_server(self):
+        self.server_process.kill()

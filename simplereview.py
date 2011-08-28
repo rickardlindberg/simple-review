@@ -7,15 +7,18 @@ import sys
 ROOT = os.path.dirname(__file__)
 sys.path.insert(0, os.path.join(ROOT, "libs", "web.py-0.36"))
 
+if os.getenv("SIMPLE_REVIEW_CONFIG", None) is None:
+    os.environ["SIMPLE_REVIEW_CONFIG"] = "dev.config"
+
 from simplereview.commentgrouper import CommentGrouper
 from simplereview.domain import Review
-from simplereview.repositories import SqliteReviewRepository
 from simplereview.reviewlist import ReviewList
+import simplereview.config
 
 import web
 
-repo = SqliteReviewRepository(os.getenv("DB_PATH", "dev.db"))
-render = web.template.render(os.getenv("TEMPLATE_DIR", "templates/"), base="base")
+config = simplereview.config.read()
+
 urls = (
     "/", "list_reviews",
     "/create_review", "create_review",
@@ -26,27 +29,27 @@ urls = (
 
 class list_reviews:
     def GET(self):
-        return render.list_reviews(ReviewList(repo.list_by_date()))
+        return config.render.list_reviews(ReviewList(config.repo.list_by_date()))
 
 class create_review:
     def POST(self):
         i = web.webapi.input()
-        return "%s" % repo.save(Review(title=i.title, diff=i.diff, diff_author=i.diff_author))
+        return "%s" % config.repo.save(Review(title=i.title, diff=i.diff, diff_author=i.diff_author))
 
 class comments_json:
     def GET(self, review_id):
         web.header("Content-Type", "application/json")
-        return CommentGrouper(repo.find_by_id(review_id).comments).to_json()
+        return CommentGrouper(config.repo.find_by_id(review_id).comments).to_json()
 
 class add_comment:
     def POST(self, review_id):
         i = web.webapi.input()
-        repo.add_comment(review_id, i.author, i.comment, i.number)
+        config.repo.add_comment(review_id, i.author, i.comment, i.number)
         web.seeother("/review/%s" % review_id)
 
 class review:
     def GET(self, review_id):
-        return render.review(repo.find_by_id(review_id))
+        return config.render.review(config.repo.find_by_id(review_id))
 
 if __name__ == "__main__":
     web.application(urls, globals()).run()

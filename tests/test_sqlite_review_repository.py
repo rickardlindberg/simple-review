@@ -17,6 +17,10 @@ class SqliteReviewRepositoryTest(unittest.TestCase):
         self.repo.save(Review())
         self.assertEquals(1, len(self.repo.list_by_date()))
 
+    def test_returns_id_of_saved_review(self):
+        id_ = self.repo.save(Review())
+        self.assertNotEquals(None, id_)
+
     def test_saved_reviews_can_be_retrieved(self):
         self.repo.save(Review(name="fix bug", diff="diff...", user="rick"))
         review = self.repo.list_by_date()[0]
@@ -41,9 +45,9 @@ class SqliteReviewRepositoryTest(unittest.TestCase):
         self.assertNotEquals(all_reviews[0].id_, all_reviews[1].id_)
 
     def test_reviews_can_be_retrieved_by_id(self):
-        self.repo.save(Review())
+        id_ = self.repo.save(Review())
         review_by_list = self.repo.list_by_date()[0]
-        review_by_id = self.repo.find_by_id(review_by_list.id_)
+        review_by_id = self.repo.find_by_id(id_)
         self.assertEquals(review_by_list.name, review_by_id.name)
 
     def test_sorts_reviews_latest_first(self):

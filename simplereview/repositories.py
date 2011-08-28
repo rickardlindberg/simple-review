@@ -36,7 +36,8 @@ class SqliteReviewRepository(ReviewRepository):
                 review.diff,
                 review.user
             ))
-        self._with_cursor(execure_insert_query)
+            return cursor.lastrowid
+        return self._with_cursor(execure_insert_query)
 
     def list_by_date(self):
         result = []

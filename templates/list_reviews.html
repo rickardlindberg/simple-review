@@ -8,6 +8,6 @@ $for section in list.sections:
     $for review in section.reviews:
         <li>
             <a href="/review/$review.id_">$review.name</a>
-            (by <b>$review.user</b> at $review.formatted_date())
+            (by <b>$review.diff_author</b> at $review.formatted_date())
         </li>
     </ul>

@@ -22,11 +22,11 @@ class SqliteReviewRepositoryTest(unittest.TestCase):
         self.assertNotEquals(None, id_)
 
     def test_saved_reviews_can_be_retrieved(self):
-        self.repo.save(Review(name="fix bug", diff="diff...", user="rick"))
+        self.repo.save(Review(name="fix bug", diff="diff...", diff_author="rick"))
         review = self.repo.list_by_date()[0]
         self.assertEquals("fix bug", review.name)
         self.assertEqual("diff...", review.diff)
-        self.assertEqual("rick", review.user)
+        self.assertEqual("rick", review.diff_author)
 
     def test_adds_date_when_saving_review(self):
         self.repo.save(Review())
@@ -62,7 +62,7 @@ class SqliteReviewRepositoryTest(unittest.TestCase):
         review = self.repo.find_by_id(review_id)
         self.repo.add_comment(review.id_, "rick", "comment")
         review = self.repo.find_by_id(review_id)
-        self.assertEquals("rick", review.comments[0].user)
+        self.assertEquals("rick", review.comments[0].author)
         self.assertEquals("comment", review.comments[0].text)
 
     def test_can_add_line_comment_to_review(self):
@@ -70,7 +70,7 @@ class SqliteReviewRepositoryTest(unittest.TestCase):
         review = self.repo.find_by_id(review_id)
         self.repo.add_comment(review.id_, "rick", "comment", 5)
         review = self.repo.find_by_id(review_id)
-        self.assertEquals("rick", review.comments[0].user)
+        self.assertEquals("rick", review.comments[0].author)
         self.assertEquals("comment", review.comments[0].text)
         self.assertEquals(5, review.comments[0].line)
 

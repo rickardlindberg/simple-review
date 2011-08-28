@@ -10,7 +10,7 @@ function loadCommentsFor(review_id) {
                         commentsDiv.append($("<hr/>"));
                     }
                     commentsDiv.append($("<div/>").addClass("line-comment").html(
-                        "<i>by <b>" + comment.user + "</b> at " + comment.date + "</i><br />" +
+                        "<i>by <b>" + comment.author + "</b> at " + comment.date + "</i><br />" +
                         comment.text
                     ));
                 });

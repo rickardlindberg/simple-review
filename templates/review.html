@@ -43,7 +43,7 @@ $for file in review.parsed_diff().files:
 $for comment in review.comments:
   <li>
     <div class="header">
-      by <b>$comment.user</b> at $comment.formatted_date()
+      by <b>$comment.author</b> at $comment.formatted_date()
       $if comment.is_line_comment():
         <a href="#$comment.line">comment on line</a>
     </div>

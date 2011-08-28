@@ -8,13 +8,13 @@ from simplereview.json import json_value
 
 class Review(object):
 
-    def __init__(self, id_=None, name=None, date=None, diff=None, user=None,
-                 comments=None):
+    def __init__(self, id_=None, name=None, date=None, diff=None,
+                 diff_author=None, comments=None):
         self.id_ = id_
         self.name = name
         self.date = date
         self.diff = diff
-        self.user = user
+        self.diff_author = diff_author
         self.comments = comments
 
     def comments_json(self):
@@ -31,10 +31,10 @@ class Review(object):
 
 class Comment(object):
 
-    def __init__(self, review_id=None, date=None, user=None, text=None, line=None):
+    def __init__(self, review_id=None, date=None, author=None, text=None, line=None):
         self.review_id = review_id
         self.date = date
-        self.user = user
+        self.author = author
         self.text = text
         self.line = line
 
@@ -47,7 +47,7 @@ class Comment(object):
     def to_json(self):
         return json_object({
             "date": json_value(web.websafe(self.formatted_date())),
-            "user": json_value(web.websafe(self.user)),
+            "author": json_value(web.websafe(self.author)),
             "text": json_value(web.websafe(self.text)),
             "line": json_value(web.websafe(self.line))
         })

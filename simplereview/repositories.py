@@ -17,7 +17,7 @@ class ReviewRepository(object):
     def find_by_id(self, id_):
         raise NotImplementedError()
 
-    def add_comment(self, review_id, user, text, line=-1):
+    def add_comment(self, review_id, author, text, line=-1):
         raise NotImplementedError()
 
 
@@ -30,11 +30,11 @@ class SqliteReviewRepository(ReviewRepository):
 
     def save(self, review):
         def execure_insert_query(cursor):
-            cursor.execute("insert into reviews (name, date, diff, user) values (?, ?, ?, ?)", (
+            cursor.execute("insert into reviews (name, date, diff, diff_author) values (?, ?, ?, ?)", (
                 review.name,
                 datetime.datetime.now(),
                 review.diff,
-                review.user
+                review.diff_author
             ))
             return cursor.lastrowid
         return self._with_cursor(execure_insert_query)
@@ -54,12 +54,12 @@ class SqliteReviewRepository(ReviewRepository):
             return self._row_to_review(cursor.fetchone())
         return self._with_cursor(execute_select_query)
 
-    def add_comment(self, review_id, user, text, line=-1):
+    def add_comment(self, review_id, author, text, line=-1):
         def execute_insert_query(cursor):
-            cursor.execute("insert into comments (review_id, date, user, text, line) values (?, ?, ?, ?, ?)", (
+            cursor.execute("insert into comments (review_id, date, author, text, line) values (?, ?, ?, ?, ?)", (
                 review_id,
                 datetime.datetime.now(),
-                user,
+                author,
                 text,
                 line
             ))
@@ -71,7 +71,7 @@ class SqliteReviewRepository(ReviewRepository):
             name=row["name"],
             date=row["date"],
             diff=row["diff"],
-            user=row["user"],
+            diff_author=row["diff_author"],
             comments=self._fetch_comments(row["id"]),
         )
         return review
@@ -89,7 +89,7 @@ class SqliteReviewRepository(ReviewRepository):
         return Comment(
             review_id=row["review_id"],
             date=row["date"],
-            user=row["user"],
+            author=row["author"],
             text=row["text"],
             line=row["line"]
         )
@@ -102,14 +102,14 @@ class SqliteReviewRepository(ReviewRepository):
                 name text,
                 date timestamp,
                 diff text,
-                user text
+                diff_author text
             )
             """)
             cursor.execute("""
             create table comments (
                 review_id integer,
                 date timestamp,
-                user text,
+                author text,
                 text text,
                 line integer
             )

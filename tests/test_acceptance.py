@@ -42,7 +42,7 @@ class AcceptanceTest(unittest.TestCase):
         params = urllib.urlencode({
             "name": name,
             "diff": "",
-            "user": ""
+            "diff_author": ""
         })
         urllib.urlopen("http://localhost:8081/create_review", params)
 

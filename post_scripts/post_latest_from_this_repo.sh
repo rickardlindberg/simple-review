@@ -25,7 +25,7 @@ extract_review_data() {
 post_review() {
     curl \
         --data-urlencode "name=${message}" \
-        --data-urlencode "user=${author}" \
+        --data-urlencode "diff_author=${author}" \
         --data-urlencode "diff@${DIFF_FILE_NAME}" \
         ${SERVER}/create_review
 }

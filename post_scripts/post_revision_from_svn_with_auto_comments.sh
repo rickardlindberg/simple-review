@@ -21,7 +21,7 @@ post_review() {
     curl \
         --silent \
         --data-urlencode "name=r${revision}: ${message}" \
-        --data-urlencode "user=${author}" \
+        --data-urlencode "diff_author=${author}" \
         --data-urlencode "diff@${DIFF_FILE_NAME}" \
         ${REVIEW_SERVER}/create_review
 }

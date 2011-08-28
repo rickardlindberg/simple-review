@@ -38,6 +38,9 @@ class Comment(object):
         self.text = text
         self.line = line
 
+    def is_line_comment(self):
+        return self.line != -1
+
     def formatted_date(self):
         return format_date(self.date)
 

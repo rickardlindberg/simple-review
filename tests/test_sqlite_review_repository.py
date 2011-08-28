@@ -58,12 +58,21 @@ class SqliteReviewRepositoryTest(unittest.TestCase):
             [review.name for review in self.repo.list_by_date()])
 
     def test_can_add_comment_to_review(self):
-        self.repo.save(Review())
-        review = self.repo.list_by_date()[0]
+        review_id = self.repo.save(Review())
+        review = self.repo.find_by_id(review_id)
         self.repo.add_comment(review.id_, "rick", "comment")
-        review = self.repo.list_by_date()[0]
+        review = self.repo.find_by_id(review_id)
         self.assertEquals("rick", review.comments[0].user)
         self.assertEquals("comment", review.comments[0].text)
+
+    def test_can_add_line_comment_to_review(self):
+        review_id = self.repo.save(Review())
+        review = self.repo.find_by_id(review_id)
+        self.repo.add_comment(review.id_, "rick", "comment", 5)
+        review = self.repo.find_by_id(review_id)
+        self.assertEquals("rick", review.comments[0].user)
+        self.assertEquals("comment", review.comments[0].text)
+        self.assertEquals(5, review.comments[0].line)
 
     def test_adds_date_when_adding_comment(self):
         self.repo.save(Review())

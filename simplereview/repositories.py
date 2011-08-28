@@ -111,7 +111,7 @@ class SqliteReviewRepository(ReviewRepository):
                 date timestamp,
                 user text,
                 text text,
-                line text
+                line integer
             )
             """)
         self._with_cursor(execute_create_queries)

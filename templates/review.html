@@ -21,6 +21,7 @@ $for file in review.parsed_diff().files:
         <div class="file-header">$file.old</div>
     $for line in file.lines:
         <div class="line line-$line.type_">
+            <a name="$line.number" />
             <div id="line-margin-$line.number" class="margin">
                 <div class="margin-col">
                     <a href="#" class="add-comment" style="display: none;">
@@ -43,6 +44,8 @@ $for comment in review.comments:
   <li>
     <div class="header">
       by <b>$comment.user</b> at $comment.formatted_date()
+      $if comment.is_line_comment():
+        <a href="#$comment.line">comment on line</a>
     </div>
     <div class="body">
       $comment.text

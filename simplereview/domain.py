@@ -17,11 +17,6 @@ class Review(object):
         self.diff_author = diff_author
         self.comments = comments
 
-    def comments_json(self):
-        return json_list(
-            comment.to_json() for comment in self.comments
-        )
-
     def parsed_diff(self):
         return parse(self.diff)
 

@@ -1,0 +1,21 @@
+Simple review requires Python to run. All other required libraries are
+included.
+
+You can start a development web-server like this:
+
+    ./simplereview.py [port]
+
+The environment variable SIMPLE_REVIEW_CONFIG should point to a configuration
+file. If not defined, it defaults to dev.config. You probably want to create
+your own configuration and then run the server like this:
+
+    SIMPLE_REVIEW_CONFIG=/path/to/my.config ./simplereview.py [port]
+
+Changes are posted to the server by sending an HTTP POST request. To get
+started, you can import the latest changes on the code base of simple review
+(assuming you checked this out using git) by running this command:
+
+    ./post_scripts/post_latest_from_this_repo.sh
+
+The scripts in the post_scripts directory give you an idea how to post reviews.
+You should write your own script to fit your need.

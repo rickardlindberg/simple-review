@@ -1,0 +1,6 @@
+Simple review is a web-based tool that makes it easy to comment on changes to
+text files.
+
+Changes are posted as unified diffs that are typically generated from a source
+control system. The diff is displayed in a nice format and you can easily leave
+comments on each line or the whole change.

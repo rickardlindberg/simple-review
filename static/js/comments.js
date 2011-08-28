@@ -23,15 +23,16 @@ function loadCommentsFor(review_id) {
 function registerMarginHoverHandlers() {
     $(".margin").hover(
         function () {
-            var pos = $(this).find(".has-comment").offset();
-            $(this).find(".line-comments").css("top", (pos.top + 20) + "px");
-            $(this).find(".line-comments").css("left", (pos.left) + "px");
-
             $(this).find(".add-comment").show();
+
+            var pos = $(this).find(".has-comment").offset();
+            pos.top += 20;
+            $(this).find(".line-comments").offset(pos);
             $(this).find(".line-comments").show();
         },
         function () {
             $(this).find(".add-comment").hide();
+
             $(this).find(".line-comments").hide();
         }
     );
@@ -43,9 +44,10 @@ function registerAddLineCommentClickHandlers() {
             var id = $(this).parent().parent().attr("id");
             var line = id.substring(id.lastIndexOf("-") + 1);
             var pos = $(this).offset();
+            pos.top += 20;
+            pos.left += 20;
             $("#linenum").val(line);
-            $("#line-comment-form").css("top", (pos.top + 20) + "px");
-            $("#line-comment-form").css("left", (pos.left + 20) + "px");
+            $("#line-comment-form").offset(pos);
             $("#line-comment-form").show();
             event.preventDefault();
         }

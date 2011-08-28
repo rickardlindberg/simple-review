@@ -31,7 +31,7 @@ class list_reviews:
 class create_review:
     def POST(self):
         i = web.webapi.input()
-        return "%s" % repo.save(Review(name=i.name, diff=i.diff, diff_author=i.diff_author))
+        return "%s" % repo.save(Review(title=i.title, diff=i.diff, diff_author=i.diff_author))
 
 class comments_json:
     def GET(self, review_id):

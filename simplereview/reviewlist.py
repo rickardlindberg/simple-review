@@ -13,12 +13,12 @@ class ReviewList(object):
             ("Last Week", self._was_last_week),
             ("Older", lambda review: True),
         )
-        for (name, criteria) in sections:
+        for (title, criteria) in sections:
             l = []
             while len(reviews) > 0 and criteria(reviews[0]):
                 l.append(reviews.pop(0))
             if l:
-                self.sections.append(Section(name, l))
+                self.sections.append(Section(title, l))
 
     def _is_today(self, review):
         return review.date.date() == self.today
@@ -53,6 +53,6 @@ class ReviewList(object):
 
 class Section(object):
 
-    def __init__(self, name, reviews):
-        self.name = name
+    def __init__(self, title, reviews):
+        self.title = title
         self.reviews = reviews

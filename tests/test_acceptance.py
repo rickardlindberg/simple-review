@@ -31,16 +31,16 @@ class AcceptanceTest(unittest.TestCase):
         self.server_process.kill()
 
     def test_has_review_on_list_page(self):
-        self.add_review_with_name("review 1")
+        self.add_review_with_title("review 1")
         self.assert_page_contains("/", "review 1")
 
     def test_has_review_on_review_page(self):
-        self.add_review_with_name("review 2")
+        self.add_review_with_title("review 2")
         self.assert_page_contains("/review/1", "review 2")
 
-    def add_review_with_name(self, name):
+    def add_review_with_title(self, title):
         params = urllib.urlencode({
-            "name": name,
+            "title": title,
             "diff": "",
             "diff_author": ""
         })

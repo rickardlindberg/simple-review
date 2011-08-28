@@ -3,11 +3,11 @@ $def with(list)
 <h1>Latest reviews</h1>
 
 $for section in list.sections:
-    <h2>$section.name</h2>
+    <h2>$section.title</h2>
     <ul>
     $for review in section.reviews:
         <li>
-            <a href="/review/$review.id_">$review.name</a>
+            <a href="/review/$review.id_">$review.title</a>
             (by <b>$review.diff_author</b> at $review.formatted_date())
         </li>
     </ul>

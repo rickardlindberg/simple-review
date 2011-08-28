@@ -22,9 +22,9 @@ class SqliteReviewRepositoryTest(unittest.TestCase):
         self.assertNotEquals(None, id_)
 
     def test_saved_reviews_can_be_retrieved(self):
-        self.repo.save(Review(name="fix bug", diff="diff...", diff_author="rick"))
+        self.repo.save(Review(title="fix bug", diff="diff...", diff_author="rick"))
         review = self.repo.list_by_date()[0]
-        self.assertEquals("fix bug", review.name)
+        self.assertEquals("fix bug", review.title)
         self.assertEqual("diff...", review.diff)
         self.assertEqual("rick", review.diff_author)
 
@@ -48,14 +48,14 @@ class SqliteReviewRepositoryTest(unittest.TestCase):
         id_ = self.repo.save(Review())
         review_by_list = self.repo.list_by_date()[0]
         review_by_id = self.repo.find_by_id(id_)
-        self.assertEquals(review_by_list.name, review_by_id.name)
+        self.assertEquals(review_by_list.title, review_by_id.title)
 
     def test_sorts_reviews_latest_first(self):
-        self.repo.save(Review(name="first"))
-        self.repo.save(Review(name="second"))
+        self.repo.save(Review(title="first"))
+        self.repo.save(Review(title="second"))
         self.assertEquals(
             ["second", "first"],
-            [review.name for review in self.repo.list_by_date()])
+            [review.title for review in self.repo.list_by_date()])
 
     def test_can_add_comment_to_review(self):
         review_id = self.repo.save(Review())

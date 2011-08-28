@@ -18,7 +18,7 @@ $def with(review)
 <div class="diff">
 $for file in review.parsed_diff().files:
     <div class="file">
-        <div class="file-header">$file.old</div>
+        <div class="file-header">$file.old <b>&gt;</b> $file.new</div>
     $for line in file.lines:
         <div class="line line-$line.type_">
             <a name="$line.number" />

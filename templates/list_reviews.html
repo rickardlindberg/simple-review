@@ -9,5 +9,7 @@ $for section in list.sections:
         <li>
             <a href="/review/$review.id_">$review.title</a>
             (by <b>$review.diff_author</b> at $review.formatted_date())
+            $if review.has_comments():
+                <img src="/static/images/comment.png" alt="has comments" title="has comments" />
         </li>
     </ul>

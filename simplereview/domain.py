@@ -1,7 +1,6 @@
 import web
 
 from simplereview.diffparser import parse
-from simplereview.json import json_list
 from simplereview.json import json_object
 from simplereview.json import json_value
 
@@ -16,6 +15,9 @@ class Review(object):
         self.diff = diff
         self.diff_author = diff_author
         self.comments = comments
+
+    def has_comments(self):
+        return len(self.comments) > 0
 
     def parsed_diff(self):
         return parse(self.diff)

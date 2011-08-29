@@ -19,3 +19,17 @@ started, you can import the latest changes on the code base of simple review
 
 The scripts in the post_scripts directory give you an idea how to post reviews.
 You should write your own script to fit your need.
+
+Quickstart:
+
+    > git clone https://github.com/rickardlindberg/simple-review.git
+    > cd simple-review/
+    > ./simplereview.py
+
+    From another console:
+
+    > ./post_scripts/post_latest_from_this_repo.sh
+
+    Point browser to:
+
+    http://localhost:8080/

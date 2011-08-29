@@ -32,7 +32,7 @@ post_comments() {
 }
 
 comment_on_added_pattern() {
-    for line_number in $(look_for_added_pattern $1); do
+    for line_number in $(look_for_added_pattern "$1"); do
         post_comment "$2" > /dev/null
     done
 }

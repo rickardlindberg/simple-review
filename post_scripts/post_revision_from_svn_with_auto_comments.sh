@@ -27,8 +27,8 @@ post_review() {
 }
 
 post_comments() {
-    comment_on_added_pattern "if" "no if statements allowed"
-    comment_on_added_pattern "for" "use while instead of for"
+    comment_on_added_pattern "if(" "add space after if"
+    comment_on_added_pattern "function(" "add space after function"
 }
 
 comment_on_added_pattern() {

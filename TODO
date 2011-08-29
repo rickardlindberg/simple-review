@@ -7,3 +7,5 @@
 * Format comments (\n to <br /> and such)
 * Notice added/removed files (/dev/null) and display nicer diff
 * Pimp comment forms (especially for line comments)
+* Fix so that comment box (and form) does not appear in different places when
+  hovering multiple times (happens at least in Chrome)

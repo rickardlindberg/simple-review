@@ -114,6 +114,15 @@ class SqliteReviewRepository(ReviewRepository):
                 line_number integer
             )
             """)
+            cursor.execute("""
+            create table meta (
+                key text,
+                value text
+            )
+            """)
+            cursor.execute("""
+            insert into meta (key, value) values("db_version", "1")
+            """)
         self._with_cursor(execute_create_queries)
 
     def _with_cursor(self, fn):

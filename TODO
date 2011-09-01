@@ -9,3 +9,4 @@
 * Pimp comment forms (especially for line comments)
 * Fix so that comment box (and form) does not appear in different places when
   hovering multiple times (happens at least in Chrome)
+* Comment icon does not always appear for a line comment

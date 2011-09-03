@@ -19,21 +19,23 @@ $def with(review)
 $for file in review.parsed_diff().files:
     <div class="file">
         <div class="file-header">$file.old <b>&gt;</b> $file.new</div>
-    $for line in file.lines:
-        <div class="line line-$line.type_">
-            <a name="$line.number" />
-            <div id="line-margin-$line.number" class="margin">
-                <div class="margin-col">
-                    <a href="#" class="add-comment" style="display: none;">
+        <table>
+        $for line in file.lines:
+            <tr class="line line-number-$line.number">
+                <td class="margin">
+                    <a name="$line.number" />
+                    <a href="#" id="add-comment-$line.number" class="add-comment">
                         <img border="0" src="/static/images/add.png" />
                     </a>
-                </div>
-                <div class="margin-col">
-                    <img border="0" src="/static/images/comment.png" class="has-comment" style="display: none;" />
-                </div>
-            </div>
-            <pre>$line.content</pre>
-        </div>
+                </td>
+                <td class="margin">
+                    <img border="0" src="/static/images/comment.png" class="has-comment" />
+                </td>
+                <td class="content content-$line.type_">
+                    <pre>$line.content</pre>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
 
@@ -68,12 +70,6 @@ $for comment in review.comments:
 
 <script type="text/javascript">
 $$(document).ready(function () {
-    $$("input[name=author]").val($$.cookie("user_name"));
-    $$(".addCommentForm").submit(function () {
-        $$.cookie("user_name", $$(this).find("input[name=author]").val(), { expires: 100 });
-    });
-    registerMarginHoverHandlers();
-    registerAddLineCommentClickHandlers();
-    loadCommentsFor($review.id_);
+    initComments($review.id_);
 });
 </script>

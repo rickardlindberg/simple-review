@@ -9,29 +9,36 @@
     border-bottom: 1px solid;
 }
 
-.diff .margin {
-    float: left;
-    display: block;
-    height: 20px;
-    border-right: 1px solid;
-    clear: both;
-}
-
-.diff .line { height: 20px; }
-
-.diff .margin-col {
-    float: left;
-    height: 1px;
-    width: 18px;
-    padding: 1px;
-}
-
-.diff .margin-content img {
-    padding: 0px;
+.diff table {
     margin: 0px;
 }
 
-.diff pre {
+.diff td {
+    margin: 0px;
+    padding: 0px;
+}
+
+.diff .line {
+    height: 21px;
+}
+
+.diff .margin {
+    width: 20px;
+}
+
+.diff .add-comment {
+    display: none;
+}
+
+.diff .has-comment {
+    display: none;
+}
+
+.diff .content {
+    border-left: 1px solid;
+}
+
+.diff .content pre {
     display: inline;
 }
 
@@ -94,7 +101,7 @@ ul.comments .body {
 
 .line-comments {
     display: none;
-    position: fixed;
+    position: absolute;
     top: 20px;
     left: 20px;
     border: 2px solid;
@@ -110,7 +117,7 @@ ul.comments .body {
 
 #line-comment-form {
     display: none;
-    position: fixed; 
+    position: absolute; 
     width: 300px;
 }
 

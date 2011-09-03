@@ -7,29 +7,32 @@
     border-color: #000000;
 }
 
-.diff .margin {
-    background: #DCDCDC;
-    border-color: #999999;
-}
-
 .diff .file-header {
     background: #DCDCDC;
     border-color: #999999;
 }
 
-.diff .line-added {
+.diff .margin {
+    background: #DCDCDC;
+}
+
+.diff .content {
+    border-color: #999999;
+}
+
+.diff .content-added {
     background: #B3F6AF;
 }
 
-.diff .line-removed {
+.diff .content-removed {
     background: #F6B1AF;
 }
 
-.diff .line-hunk {
+.diff .content-hunk {
     background: #DCEDEE;
 }
 
-.diff .line-context {
+.diff .content-context {
     background: #f5f5f5;
 }
 

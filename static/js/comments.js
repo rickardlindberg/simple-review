@@ -50,7 +50,7 @@ function showAddLineCommentFormWhenClickingAddCommentIcon() {
             var line = id.substring(id.lastIndexOf("-") + 1);
             var pos = $(this).position();
             $("#line-comment-form").find("input[name=line_number]").val(line);
-            showElementAtAbsolutePosition($("#line-comment-form"), pos.left+20, pos.top+20);
+            showElementAtAbsolutePosition($("#line-comment-form"), pos.left+20, pos.top+15);
             event.preventDefault();
         }
     );

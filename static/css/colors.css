@@ -49,3 +49,12 @@ ul.comments .header {
     background: #f4f4f4;
     border-color: #cccccc;
 }
+
+#line-comment-form {
+    background: #f4f4f4;
+    border-color: #cccccc;
+}
+
+#line-comment-form .comment-form {
+    background: #f4f4f4;
+}

@@ -5,7 +5,19 @@ def json_value(python_value):
         return '"%s"' % _string_escape(python_value)
 
 def _string_escape(string):
-    return string.replace("\\", "\\\\").replace('"', '\\"')
+    replacements = (
+        ('\\' , '\\\\'),
+        ('"'  , '\\"' ),
+        ('/'  , '\\/' ),
+        ('\b' , '\\b' ),
+        ('\f' , '\\f' ),
+        ('\n' , '\\n' ),
+        ('\r' , '\\r' ),
+        ('\t' , '\\t' ),
+    )
+    for (a, b) in replacements:
+        string = string.replace(a, b)
+    return string
 
 def json_list(json_values):
     return "[" + ",".join(json_values) + "]"

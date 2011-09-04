@@ -15,6 +15,12 @@ libs/web
 
     Downloaded from http://webpy.org/static/web.py-0.36.tar.gz.
 
+libs/markdown
+
+    Used to format comments.
+
+    Downloaded from http://pypi.python.org/pypi/Markdown (Markdown-2.0.3.tar.gz)
+
 static/css/libs/blueprint
 
     Used for basic layout and typography.

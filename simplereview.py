@@ -10,7 +10,7 @@ sys.path.insert(0, os.path.join(ROOT, "libs"))
 if os.getenv("SIMPLE_REVIEW_CONFIG", None) is None:
     os.environ["SIMPLE_REVIEW_CONFIG"] = "dev.config"
 
-from simplereview.commentgrouper import CommentGrouper
+from simplereview.commentgrouper import CommentsGroupedByLineNumber
 from simplereview.domain import Review
 from simplereview.reviewlist import ReviewList
 import simplereview.config
@@ -39,7 +39,7 @@ class create_review:
 class comments_json:
     def GET(self, review_id):
         web.header("Content-Type", "application/json")
-        return CommentGrouper(config.repo.find_by_id(review_id).comments).to_json()
+        return CommentsGroupedByLineNumber(config.repo.find_by_id(review_id).comments).to_json()
 
 class add_comment:
     def POST(self, review_id):

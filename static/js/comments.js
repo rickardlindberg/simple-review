@@ -69,11 +69,9 @@ function cloneForm() {
 function loadCommentsFor(reviewId) {
     $.getJSON("/review/" + reviewId + "/comments_json", function (commentsJson) {
         for (var line in commentsJson) {
-            if (line !== "-1") {
-                var hasCommentImage = $(".line-number-" + line + " .has-comment");
-                hasCommentImage.show();
-                hasCommentImage.parent().append(createCommentsBox(commentsJson[line]));
-            }
+            var hasCommentImage = $(".line-number-" + line + " .has-comment");
+            hasCommentImage.show();
+            hasCommentImage.parent().append(createCommentsBox(commentsJson[line]));
         }
     });
 }

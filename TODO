@@ -3,7 +3,6 @@
 * Notify user when another user comments (via ajax popup)
 * Email notifications
 * Prevent long lines in diff from wrapping and creating unreadable text
-* Make it possible to hide line comment form
 * Format comments (\n to <br /> and such)
 * Notice added/removed files (/dev/null) and display nicer diff
 * Comment icon does not always appear for a line comment

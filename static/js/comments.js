@@ -4,6 +4,7 @@ function initComments(reviewId) {
     showAddCommentImageWhenHoveringLine();
     showLineCommentsWhenHoveringCommentImage();
     showAddLineCommentFormWhenClickingAddCommentIcon();
+    cloneForm();
     loadCommentsFor(reviewId);
 }
 
@@ -12,7 +13,7 @@ function populateAuthorFiledInFormFromCookie() {
 }
 
 function saveAuthorToCookieWhenSubmittingForm() {
-    $(".addCommentForm").submit(function () {
+    $(".add-comment-form").submit(function () {
         var author = $(this).find("input[name=author]").val();
         $.cookie("commentAuthor", author, { expires: 100 });
     });
@@ -48,7 +49,7 @@ function showAddLineCommentFormWhenClickingAddCommentIcon() {
             var id = $(this).attr("id");
             var line = id.substring(id.lastIndexOf("-") + 1);
             var pos = $(this).position();
-            $("#linenum").val(line);
+            $("#line-comment-form").find("input[name=line_number]").val(line);
             showElementAtAbsolutePosition($("#line-comment-form"), pos.left+20, pos.top+20);
             event.preventDefault();
         }
@@ -59,6 +60,10 @@ function showElementAtAbsolutePosition(element, left, top) {
     element.css("left", left);
     element.css("top", top);
     element.show();
+}
+
+function cloneForm() {
+    $("#line-comment-form").append($(".add-comment-form").clone());
 }
 
 function loadCommentsFor(reviewId) {

@@ -3,16 +3,6 @@ $def with(review)
 <h1>Review: $review.title</h1>
 
 <div id="line-comment-form">
-  <form action="/review/$review.id_/add_comment" method="post" class="addCommentForm">
-    <input type="hidden" name="line_number" value="-1" id="linenum" />
-    <div class="comment-form">
-      <div class="header">
-        Your name: <input type="text" name="author" />
-      </div>
-      <textarea name="comment"></textarea>
-    </div>
-    <input type="submit" value="Send" />
-  </form>
 </div>
 
 <div class="diff">
@@ -57,7 +47,7 @@ $for comment in review.comments:
 
 <h2>Post comment</h2>
 
-<form action="/review/$review.id_/add_comment" method="post" class="addCommentForm">
+<form action="/review/$review.id_/add_comment" method="post" class="add-comment-form">
   <input type="hidden" name="line_number" value="-1" />
   <div class="comment-form">
     <div class="header">

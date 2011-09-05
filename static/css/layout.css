@@ -1,3 +1,14 @@
+#header {
+    padding: 5px;
+    height: 16px;
+    border-bottom: 1px solid;
+}
+
+#content {
+    margin-top: 18px;
+    margin-bottom: 18px;
+}
+
 .diff .file {
     border: 1px solid;
     margin-top: 20px;
@@ -43,25 +54,25 @@
 }
 
 ul.comments {
-  margin-left: 0px;
-  margin-right: 0px;
-  padding-left: 0px;
-  padding-right: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 ul.comments li {
-  border: 1px solid;
-  list-style: none;
-  margin-bottom: 18px;
+    border: 1px solid;
+    list-style: none;
+    margin-bottom: 18px;
 }
 
 ul.comments .header {
-  border-bottom: 1px solid;
-  padding: 5px;
+    border-bottom: 1px solid;
+    padding: 5px;
 }
 
 ul.comments .body {
-  padding: 5px;
+    padding: 5px;
 }
 
 ul.comments .body p {
@@ -92,21 +103,23 @@ ul.comments .body pre {
 .comment-form textarea {
     padding: 0px;
     margin: 0px;
-}
-
-.comment-form textarea {
     width: 100%;
 }
 
-#header {
-  padding: 5px;
-  height: 16px;
-  border-bottom: 1px solid;
+#line-comment-form {
+    display: none;
+    position: absolute; 
+    width: 600px;
+    border: 2px solid;
+    padding: 5px;
 }
 
-#content {
-  margin-top: 18px;
-  margin-bottom: 18px;
+#line-comment-form .comment-form {
+    padding: 0px;
+}
+
+#line-comment-form textarea {
+    height: 180px;
 }
 
 .line-comments {
@@ -126,22 +139,6 @@ ul.comments .body pre {
 .line-comment pre {
     margin-top: 0.5em;
     margin-bottom: 0.5em;
-}
-
-#line-comment-form {
-    display: none;
-    position: absolute; 
-    width: 600px;
-    border: 2px solid;
-    padding: 5px;
-}
-
-#line-comment-form .comment-form {
-    padding: 0px;
-}
-
-#line-comment-form textarea {
-    height: 180px;
 }
 
 .line-comments hr {

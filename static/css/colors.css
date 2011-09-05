@@ -1,6 +1,6 @@
 #header {
-  border-color: #B2A750;
-  background: #F0E380;
+    border-color: #B2A750;
+    background: #F0E380;
 }
 
 .diff .file {
@@ -45,11 +45,6 @@ ul.comments .header {
     background: #cccccc;
 }
 
-.line-comments {
-    background: #f4f4f4;
-    border-color: #cccccc;
-}
-
 #line-comment-form {
     background: #f4f4f4;
     border-color: #cccccc;
@@ -57,4 +52,9 @@ ul.comments .header {
 
 #line-comment-form .comment-form {
     background: #f4f4f4;
+}
+
+.line-comments {
+    background: #f4f4f4;
+    border-color: #cccccc;
 }

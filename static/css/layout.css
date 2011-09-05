@@ -64,6 +64,16 @@ ul.comments .body {
   padding: 5px;
 }
 
+ul.comments .body p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+ul.comments .body pre {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
 .comment-form {
     padding: 5px;
 }
@@ -108,9 +118,14 @@ ul.comments .body {
     width: 600px;
 }
 
-.line-comment {
-    margin-bottom: 5px;
-    margin-top: 5px;
+.line-comment p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.line-comment pre {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
 }
 
 #line-comment-form {

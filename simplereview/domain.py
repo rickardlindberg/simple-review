@@ -1,3 +1,4 @@
+import markdown
 import web
 
 from simplereview.diffparser import parse
@@ -42,11 +43,14 @@ class Comment(object):
     def formatted_date(self):
         return format_date(self.date)
 
+    def marked_down_text(self):
+        return markdown.markdown(self.text, safe_mode="escape")
+
     def to_json(self):
         return json_object({
             "date": json_value(web.websafe(self.formatted_date())),
             "author": json_value(web.websafe(self.author)),
-            "text": json_value(web.websafe(self.text)),
+            "text": json_value(self.marked_down_text()),
             "line_number": json_value(web.websafe(self.line_number))
         })
 

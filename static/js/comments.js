@@ -64,7 +64,7 @@ function showElementAtAbsolutePosition(element, left, top) {
 
 function cloneForm() {
     $("#line-comment-form").append($(".add-comment-form").clone());
-    $("#line-comment-form .header").append($("<a href=\"#\">close</a>").click(function (event) {
+    $("#line-comment-form .header").append($("<a href=\"#\">(close)</a>").click(function (event) {
         $("#line-comment-form").hide();
         event.preventDefault();
     }));
@@ -87,7 +87,7 @@ function createCommentsBox(comments) {
             commentsDiv.append($("<hr/>"));
         }
         commentsDiv.append($("<div/>").addClass("line-comment").html(
-            "<i>by <b>" + comment.author + "</b> at " + comment.date + "</i><br />" +
+            "<p><i>by <b>" + comment.author + "</b> at " + comment.date + "</i></p>" +
             comment.text
         ));
     });

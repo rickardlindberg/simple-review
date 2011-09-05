@@ -3,4 +3,3 @@
 * Notify user when another user comments (via ajax popup)
 * Email notifications
 * Prevent long lines in diff from wrapping and creating unreadable text
-* Format comments (\n to <br /> and such)

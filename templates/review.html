@@ -40,7 +40,7 @@ $for comment in review.comments:
         <a href="#$comment.line_number">comment on line</a>
     </div>
     <div class="body">
-      $comment.text
+      $:comment.marked_down_text()
     </div>
   </li>
 </ul>
@@ -52,6 +52,7 @@ $for comment in review.comments:
   <div class="comment-form">
     <div class="header">
       Your name: <input type="text" name="author" />
+      <a href="http://en.wikipedia.org/wiki/Markdown">markdown syntax supported</a>
     </div>
     <textarea name="comment"></textarea>
   </div>

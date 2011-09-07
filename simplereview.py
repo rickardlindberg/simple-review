@@ -12,6 +12,7 @@ if os.getenv("SIMPLE_REVIEW_CONFIG", None) is None:
 
 from simplereview.commentgrouper import CommentsGroupedByLineNumber
 from simplereview.domain import Review
+from simplereview.lineanchor import line_anchor
 from simplereview.reviewlist import ReviewList
 import simplereview.config
 
@@ -45,7 +46,7 @@ class add_comment:
     def POST(self, review_id):
         i = web.webapi.input()
         config.repo.add_comment(review_id, i.author, i.comment, i.line_number)
-        web.seeother("/review/%s" % review_id)
+        web.seeother("/review/%s%s" % (review_id, line_anchor(i.line_number)))
 
 class review:
     def GET(self, review_id):
